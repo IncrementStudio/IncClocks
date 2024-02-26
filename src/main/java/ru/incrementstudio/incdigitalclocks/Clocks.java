@@ -14,19 +14,19 @@ public class Clocks {
     public final Map<String, List<Number>> numbers = new HashMap<>();
     private final String format;
     private final int gap;
-    private final DigitSet digitSet;
+    private final GlyphSet glyphSet;
     private final MaterialSet materialSet;
     private final Location location;
     private final World world;
     private final BlockFace facing;
 
-    public Clocks(String format, int gap, Location location, BlockFace facing, DigitSet digitSet, MaterialSet materialSet) {
+    public Clocks(String format, int gap, Location location, BlockFace facing, GlyphSet glyphSet, MaterialSet materialSet) {
         this.format = format;
         this.gap = gap;
         this.location = location;
         world = location.getWorld();
         this.facing = facing;
-        this.digitSet = digitSet;
+        this.glyphSet = glyphSet;
         this.materialSet = materialSet;
 
         String[] formats = format.split(":");
@@ -36,10 +36,10 @@ public class Clocks {
                     numbers.put(formats[i], new ArrayList<>());
                     numbers.get(formats[i]).add(
                             new Number(2, gap,
-                            facing == BlockFace.UP ? location.clone().add(i * (digitSet.getWidth() + gap), 0, 0) :
-                            facing == BlockFace.DOWN ? location.clone().subtract(i * (digitSet.getWidth() + gap), 0, 0) :
+                            facing == BlockFace.UP ? location.clone().add(i * (glyphSet.getWidth() + gap), 0, 0) :
+                            facing == BlockFace.DOWN ? location.clone().subtract(i * (glyphSet.getWidth() + gap), 0, 0) :
                             location,
-                            facing, digitSet, materialSet)
+                            facing, glyphSet, materialSet)
                     );
                     break;
             }

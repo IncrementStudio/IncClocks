@@ -38,19 +38,15 @@ public final class Main extends JavaPlugin {
         if (!clocksDirectory.exists()) {
             clocksDirectory.mkdirs();
         }
-        File digitSetsDirectory = new File("plugins/IncDigitalClocks/digitSets");
+        File digitSetsDirectory = new File("plugins/IncDigitalClocks/glyphs");
         if (!digitSetsDirectory.exists()) {
             digitSetsDirectory.mkdirs();
         }
 
         getCommand("clocks").setExecutor(new Command());
 
-        Number hours = new Number(2, 1, new Location(Bukkit.getWorld("world"), 0, 71, 0), BlockFace.UP, new DigitSet("default"), new MaterialSet());
-        hours.setValue(0);
-
-        Number mins = new Number(2, 1, new Location(Bukkit.getWorld("world"), 0, 71, 8), BlockFace.UP, new DigitSet("default"), new MaterialSet());
-        mins.setValue(0);
-
+        Number hours = new Number(2, 1, new Location(Bukkit.getWorld("world"), 0, 71, 0), BlockFace.UP, GlyphSet.getSet("minecraft"), new MaterialSet());
+        Number mins = new Number(2, 1, new Location(Bukkit.getWorld("world"), 0, 71, 8), BlockFace.UP, GlyphSet.getSet("minecraft"), new MaterialSet());
         new BukkitRunnable() {
             @Override
             public void run() {
