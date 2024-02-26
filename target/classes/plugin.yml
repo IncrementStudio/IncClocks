@@ -1,5 +1,5 @@
 name: IncDigitalClocks
-version: '${project.version}'
+version: '1.0'
 main: ru.incrementstudio.incdigitalclocks.Main
 api-version: '1.20'
 authors: [IncrementStudio++]

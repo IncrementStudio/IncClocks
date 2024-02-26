@@ -1,5 +1,7 @@
 package ru.incrementstudio.incdigitalclocks;
 
+import ru.incrementstudio.incapi.configs.Config;
+
 import java.util.List;
 
 public class DigitSet {
@@ -32,10 +34,12 @@ public class DigitSet {
         };
         for (int i = 0; i < 11; i++) {
             List<String> digitData = setData[i];
-            set[i] = new boolean[digitData.size()][];
+            set[i] = new boolean[height][];
             for (int j = 0; j < Math.min(height, digitData.size()); j++) {
                 String line = digitData.get(j);
-                set[i][j] = new boolean[line.length()];
+                if (line.length() < width)
+                    line += " ".repeat(width - line.length());
+                set[i][j] = new boolean[width];
                 for (int k = 0; k < Math.min(width, line.length()); k++) {
                     set[i][j][k] = line.charAt(k) != ' ';
                 }

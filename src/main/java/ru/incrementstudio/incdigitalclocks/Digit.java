@@ -36,7 +36,7 @@ public class Digit {
         if (facing == BlockFace.UP || facing == BlockFace.DOWN) {
             for (int x = 0; x < digitSet.getWidth(); x++) {
                 for (int z = 0; z < digitSet.getHeight(); z++) {
-                    action.exec(x, z, location.getBlockX() + x, location.getBlockY(), location.getBlockZ() + z);
+                    action.exec(z, x, location.getBlockX() + x, location.getBlockY(), location.getBlockZ() + z);
                 }
             }
         }
