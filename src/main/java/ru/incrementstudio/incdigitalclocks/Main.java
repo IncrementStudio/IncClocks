@@ -10,6 +10,7 @@ import ru.incrementstudio.incapi.configs.ConfigManager;
 import ru.incrementstudio.incapi.utils.MathUtil;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public final class Main extends JavaPlugin {
@@ -28,6 +29,8 @@ public final class Main extends JavaPlugin {
         return logger;
     }
 
+    Clocks clocks;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -38,31 +41,22 @@ public final class Main extends JavaPlugin {
         if (!clocksDirectory.exists()) {
             clocksDirectory.mkdirs();
         }
-        File digitSetsDirectory = new File("plugins/IncDigitalClocks/glyphs");
+        File digitSetsDirectory = new File("plugins/IncDigitalClocks/fonts");
         if (!digitSetsDirectory.exists()) {
             digitSetsDirectory.mkdirs();
         }
 
         getCommand("clocks").setExecutor(new Command());
 
-        Number hours = new Number(2, 1, new Location(Bukkit.getWorld("world"), 0, 71, 0), BlockFace.UP, GlyphSet.getSet("minecraft"), new MaterialSet());
-        Number mins = new Number(2, 1, new Location(Bukkit.getWorld("world"), 0, 71, 8), BlockFace.UP, GlyphSet.getSet("minecraft"), new MaterialSet());
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                hours.setValue(
-                        Bukkit.getWorld("world").getTime() / 1000 +
-                                (Bukkit.getWorld("world").getTime() / 1000 + 6 < 24 ? 6 : -18)
-                );
-                mins.setValue(
-                        (long) MathUtil.lerp(0, 60, MathUtil.inverseLerp(0, 1000, Bukkit.getWorld("world").getTime() % 1000))
-                );
-                Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 5);
-            }
-        }.runTaskTimer(Main.getInstance(), 0L, 1L);
+        try {
+            clocks = new Clocks("default", new Location(Bukkit.getWorld("world"), 0, 71, 0), BlockFace.UP);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onDisable() {
+        clocks.clear();
     }
 }

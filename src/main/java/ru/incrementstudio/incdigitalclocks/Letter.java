@@ -6,27 +6,31 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-public class Digit {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Letter {
     @FunctionalInterface
     public interface RegionAction {
         void exec(int u, int v, int x, int y, int z);
     }
-    private int currentValue = 0;
-    private GlyphSet glyphSet;
+    private char currentValue = ' ';
+    private Font font;
     private MaterialSet materialSet;
     private Location location;
     private World world;
     private BlockFace facing;
+    private List<Block> blockList = new ArrayList<>();
 
-    public Digit(Location location, BlockFace facing, GlyphSet glyphSet, MaterialSet materialSet) {
+    public Letter(Location location, BlockFace facing, Font font, MaterialSet materialSet) {
         this.location = location;
         world = location.getWorld();
         this.facing = facing;
-        this.glyphSet = glyphSet;
+        this.font = font;
         this.materialSet = materialSet;
     }
 
-    public void setValue(int value) {
+    public void setValue(char value) {
         currentValue = value;
         clear();
         set();
@@ -34,27 +38,27 @@ public class Digit {
 
     private void forRegion(RegionAction action) {
         if (facing == BlockFace.UP || facing == BlockFace.DOWN) {
-            for (int x = 0; x < glyphSet.getWidth(); x++) {
-                for (int z = 0; z < glyphSet.getHeight(); z++) {
+            for (int x = 0; x < font.getWidth(); x++) {
+                for (int z = 0; z < font.getHeight(); z++) {
                     action.exec(x, z, location.getBlockX() + x, location.getBlockY(), location.getBlockZ() + z);
                 }
             }
         }
     }
 
-    private void clear() {
-        forRegion((u, v, x, y, z) -> {
-            Block block = world.getBlockAt(x, y, z);
+    public void clear() {
+        for (Block block : blockList)
             block.setType(Material.AIR);
-        });
+        blockList.clear();
     }
 
     private void set() {
-        boolean[][] pattern = glyphSet.getByIndex(currentValue);
+        boolean[][] pattern = font.getByChar(currentValue);
         forRegion((u, v, x, y, z) -> {
             if (pattern[u][v]) {
                 Block block = world.getBlockAt(x, y, z);
                 block.setType(materialSet.getDigits());
+                blockList.add(block);
             }
         });
     }

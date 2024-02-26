@@ -1,59 +1,86 @@
 package ru.incrementstudio.incdigitalclocks;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.scheduler.BukkitRunnable;
+import ru.incrementstudio.incapi.configs.Config;
+import ru.incrementstudio.incapi.utils.MathUtil;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
 
 public class Clocks {
-    public final Map<String, List<Number>> numbers = new HashMap<>();
-    private final String format;
+    private enum TimeType {
+        REAL, GAME
+    }
+    private final Config config;
+    private final TimeType timeType;
+    private final java.lang.String format;
     private final int gap;
-    private final GlyphSet glyphSet;
+    private final Font font;
     private final MaterialSet materialSet;
     private final Location location;
     private final World world;
     private final BlockFace facing;
+    private final BlockString timeString;
 
-    public Clocks(String format, int gap, Location location, BlockFace facing, GlyphSet glyphSet, MaterialSet materialSet) {
-        this.format = format;
-        this.gap = gap;
+    public Clocks(String name, Location location, BlockFace facing) throws FileNotFoundException {
+        File configFile = new File("plugins/IncDigitalClocks/clocks/" + name + ".yml");
+        if (!configFile.exists())
+            throw new FileNotFoundException("Clocks '" + configFile.getName() + "' not found!");
+        config = new Config(Main.getInstance(), configFile.getPath());
+
+        timeType = config.get().contains("time") ? TimeType.valueOf(config.get().getString("time")) : TimeType.REAL;
+        format = config.get().contains("format") ? config.get().getString("format") : "%h:%m";
+        gap = config.get().contains("letter-spacing") ? config.get().getInt("letter-spacing") : -4;
         this.location = location;
         world = location.getWorld();
         this.facing = facing;
-        this.glyphSet = glyphSet;
-        this.materialSet = materialSet;
+        font = Font.getFont(config.get().contains("font") ? config.get().getString("font") : "", config.get().contains("text-size") ? (float) config.get().getDouble("text-size") : 16);
+        this.materialSet = new MaterialSet();
 
-        String[] formats = format.split(":");
-        for (int i = 0; i < formats.length; i++) {
-            switch (formats[i]) {
-                case "min":
-                    numbers.put(formats[i], new ArrayList<>());
-                    numbers.get(formats[i]).add(
-                            new Number(2, gap,
-                            facing == BlockFace.UP ? location.clone().add(i * (glyphSet.getWidth() + gap), 0, 0) :
-                            facing == BlockFace.DOWN ? location.clone().subtract(i * (glyphSet.getWidth() + gap), 0, 0) :
-                            location,
-                            facing, glyphSet, materialSet)
-                    );
-                    break;
-            }
-        }
+        timeString = new BlockString(format
+                .replace("%h", "..")
+                .replace("%m", "..")
+                .replace("%s", "..")
+                .length(), gap, location, facing, font, materialSet
+        );
+
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (Number number : numbers.get("min")) {
-                    number.setValue(location.getWorld().getGameTime());
+                switch (timeType) {
+                    case GAME:
+                        long hoursG = Bukkit.getWorld("world").getTime() / 1000 +
+                                (Bukkit.getWorld("world").getTime() / 1000 + 6 < 24 ? 6 : -18);
+                        long minutesG = (long) MathUtil.lerp(0, 60, MathUtil.inverseLerp(0, 1000, Bukkit.getWorld("world").getTime() % 1000));
+                        timeString.setValue(
+                                format
+                                        .replace("%h", "0".repeat(2 - String.valueOf(hoursG).length()) + hoursG)
+                                        .replace("%m", "0".repeat(2 - String.valueOf(minutesG).length()) + minutesG)
+                        );
+                        break;
+                    case REAL:
+                        long hoursR = new Date(System.currentTimeMillis()).getHours();
+                        long minutesR = new Date(System.currentTimeMillis()).getMinutes();
+                        long secondsR = new Date(System.currentTimeMillis()).getSeconds();
+                        timeString.setValue(
+                                format
+                                        .replace("%h", "0".repeat(2 - String.valueOf(hoursR).length()) + hoursR)
+                                        .replace("%m", "0".repeat(2 - String.valueOf(minutesR).length()) + minutesR)
+                                        .replace("%s", "0".repeat(2 - String.valueOf(secondsR).length()) + secondsR)
+                        );
+                        break;
                 }
-//                for (Number number : numbers.get("hour")) {
-//                    number.setValue();
-//                }
             }
         }.runTaskTimer(Main.getInstance(), 0L, 1L);
+    }
+
+    public void clear() {
+        timeString.clear();
     }
 }
