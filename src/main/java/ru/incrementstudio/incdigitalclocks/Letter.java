@@ -19,6 +19,10 @@ public class Letter {
     private Font font;
     private MaterialSet materialSet;
     private Location location;
+    public Location getLocation() {
+        return location;
+    }
+
     private World world;
     private Vector u, v;
     private List<Block> blockList = new ArrayList<>();
@@ -40,9 +44,9 @@ public class Letter {
 
     private void forRegion(RegionAction action) {
         int UX = u.getBlockX(), UY = u.getBlockY(), UZ = u.getBlockZ(), VX = v.getBlockX(), VY = v.getBlockY(), VZ = v.getBlockZ();
-        for (int x = 0; x < (Math.abs((font.getWidth() * UX) + (font.getHeight() * VX)) != 0 ? Math.abs((font.getWidth() * UX) + (font.getHeight() * VX)) : 1); x++) {
-            for (int y = 0; y < (Math.abs((font.getWidth() * UY) + (font.getHeight() * VY)) != 0 ? Math.abs((font.getWidth() * UY) + (font.getHeight() * VY)) : 1); y++) {
-                for (int z = 0; z < (Math.abs((font.getWidth() * UZ) + (font.getHeight() * VZ)) != 0 ? Math.abs((font.getWidth() * UZ) + (font.getHeight() * VZ)) : 1); z++) {
+        for (int x = 0; x < Math.max(Math.abs((font.getWidth() * UX) + (font.getHeight() * VX)), 1); x++) {
+            for (int y = 0; y < Math.max(Math.abs((font.getWidth() * UY) + (font.getHeight() * VY)), 1); y++) {
+                for (int z = 0; z < Math.max(Math.abs((font.getWidth() * UZ) + (font.getHeight() * VZ)), 1); z++) {
                     action.exec(
                             Math.abs((x * UX) + (y * UY) + (z * UZ)),
                             Math.abs((x * VX) + (y * VY) + (z * VZ)),
@@ -66,7 +70,7 @@ public class Letter {
         forRegion((u, v, x, y, z) -> {
             if (pattern.length <= u) return;
             if (pattern[0].length <= v) return;
-            if (pattern[u][v]) {
+            if (pattern[u][pattern[u].length - 1 - v]) {
                 Block block = world.getBlockAt(x, y, z);
                 block.setType(materialSet.getDigits());
                 blockList.add(block);

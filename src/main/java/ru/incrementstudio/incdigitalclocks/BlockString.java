@@ -44,6 +44,17 @@ public class BlockString {
         }
     }
 
+    public int getWidth() {
+        int start = Math.abs((location.getBlockX() * u.getBlockX()) +
+        (location.getBlockY() * u.getBlockY()) +
+        (location.getBlockZ() * u.getBlockZ()));
+        int end = Math.abs((letters[letters.length - 1].getLocation().getBlockX() * u.getBlockX()) +
+        (letters[letters.length - 1].getLocation().getBlockY() * u.getBlockY()) +
+        (letters[letters.length - 1].getLocation().getBlockZ() * u.getBlockZ()));
+        int widthChar = font.getWidth();
+        return Math.max(start, end) - Math.min(start, end) + widthChar;
+    }
+
     public void clear() {
         for (Letter letter : letters)
             letter.clear();
