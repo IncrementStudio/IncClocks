@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,23 +15,26 @@ public class BlockString {
     private final MaterialSet materialSet;
     private final Location location;
     private final World world;
-    private final BlockFace facing;
+    private Vector u, v;
     private final Letter[] letters;
 
-    public BlockString(int length, int gap, Location location, BlockFace facing, Font font, MaterialSet materialSet) {
+    public BlockString(int length, int gap, Location location, Vector u, Vector v, Font font, MaterialSet materialSet) {
         this.length = length;
         this.gap = gap;
         this.location = location;
         world = location.getWorld();
-        this.facing = facing;
         this.font = font;
         this.materialSet = materialSet;
         letters = new Letter[length];
+        this.u = u;
+        this.v = v;
+
         for (int i = 0; i < letters.length; i++) {
-            if (facing == BlockFace.UP)
-                letters[i] = new Letter(location.clone().add(i * (font.getWidth() + gap), 0, 0), facing, font, materialSet);
-            if (facing == BlockFace.DOWN)
-                letters[i] = new Letter(location.clone().subtract(i * (font.getWidth() + gap), 0, 0), facing, font, materialSet);
+            letters[i] = new Letter(location.clone().add(
+                    u.getBlockX() * i * (font.getWidth() + gap),
+                    u.getBlockY() * i * (font.getWidth() + gap),
+                    u.getBlockZ() * i * (font.getWidth() + gap)),
+                    u, v, font, materialSet);
         }
     }
 

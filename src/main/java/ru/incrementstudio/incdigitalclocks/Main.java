@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import ru.incrementstudio.incapi.Logger;
 import ru.incrementstudio.incapi.configs.ConfigManager;
 import ru.incrementstudio.incapi.utils.MathUtil;
@@ -49,7 +50,11 @@ public final class Main extends JavaPlugin {
         getCommand("clocks").setExecutor(new Command());
 
         try {
-            clocks = new Clocks("default", new Location(Bukkit.getWorld("world"), 0, 71, 0), BlockFace.UP);
+            clocks = new Clocks("default",
+                    new Location(Bukkit.getWorld("world"), 0, 90, 0),
+                    new Vector(0, 0, -1),
+                    new Vector(0, -1, 0)
+            );
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

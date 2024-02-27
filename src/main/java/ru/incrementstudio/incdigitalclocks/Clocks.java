@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import ru.incrementstudio.incapi.configs.Config;
 import ru.incrementstudio.incapi.utils.MathUtil;
 
@@ -25,10 +26,10 @@ public class Clocks {
     private final MaterialSet materialSet;
     private final Location location;
     private final World world;
-    private final BlockFace facing;
     private final BlockString timeString;
+    private Vector u, v;
 
-    public Clocks(String name, Location location, BlockFace facing) throws FileNotFoundException {
+    public Clocks(String name, Location location, Vector u, Vector v) throws FileNotFoundException {
         File configFile = new File("plugins/IncDigitalClocks/clocks/" + name + ".yml");
         if (!configFile.exists())
             throw new FileNotFoundException("Clocks '" + configFile.getName() + "' not found!");
@@ -39,7 +40,8 @@ public class Clocks {
         gap = config.get().contains("letter-spacing") ? config.get().getInt("letter-spacing") : -4;
         this.location = location;
         world = location.getWorld();
-        this.facing = facing;
+        this.u = u;
+        this.v = v;
         font = Font.getFont(config.get().contains("font") ? config.get().getString("font") : "", config.get().contains("text-size") ? (float) config.get().getDouble("text-size") : 16);
         this.materialSet = new MaterialSet();
 
@@ -47,7 +49,7 @@ public class Clocks {
                 .replace("%h", "..")
                 .replace("%m", "..")
                 .replace("%s", "..")
-                .length(), gap, location, facing, font, materialSet
+                .length(), gap, location, u, v, font, materialSet
         );
 
         new BukkitRunnable() {

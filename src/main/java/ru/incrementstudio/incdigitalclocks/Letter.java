@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +20,14 @@ public class Letter {
     private MaterialSet materialSet;
     private Location location;
     private World world;
-    private BlockFace facing;
+    private Vector u, v;
     private List<Block> blockList = new ArrayList<>();
 
-    public Letter(Location location, BlockFace facing, Font font, MaterialSet materialSet) {
+    public Letter(Location location, Vector u, Vector v, Font font, MaterialSet materialSet) {
         this.location = location;
         world = location.getWorld();
-        this.facing = facing;
+        this.u = u;
+        this.v = v;
         this.font = font;
         this.materialSet = materialSet;
     }
@@ -37,10 +39,17 @@ public class Letter {
     }
 
     private void forRegion(RegionAction action) {
-        if (facing == BlockFace.UP || facing == BlockFace.DOWN) {
-            for (int x = 0; x < font.getWidth(); x++) {
-                for (int z = 0; z < font.getHeight(); z++) {
-                    action.exec(x, z, location.getBlockX() + x, location.getBlockY(), location.getBlockZ() + z);
+        int UX = u.getBlockX(), UY = u.getBlockY(), UZ = u.getBlockZ(), VX = v.getBlockX(), VY = v.getBlockY(), VZ = v.getBlockZ();
+        for (int x = 0; x < (Math.abs((font.getWidth() * UX) + (font.getHeight() * VX)) != 0 ? Math.abs((font.getWidth() * UX) + (font.getHeight() * VX)) : 1); x++) {
+            for (int y = 0; y < (Math.abs((font.getWidth() * UY) + (font.getHeight() * VY)) != 0 ? Math.abs((font.getWidth() * UY) + (font.getHeight() * VY)) : 1); y++) {
+                for (int z = 0; z < (Math.abs((font.getWidth() * UZ) + (font.getHeight() * VZ)) != 0 ? Math.abs((font.getWidth() * UZ) + (font.getHeight() * VZ)) : 1); z++) {
+                    action.exec(
+                            Math.abs((x * UX) + (y * UY) + (z * UZ)),
+                            Math.abs((x * VX) + (y * VY) + (z * VZ)),
+                            location.getBlockX() + x * (UX + VX),
+                            location.getBlockY() + y * (UY + VY),
+                            location.getBlockZ() + z * (UZ + VZ)
+                    );
                 }
             }
         }
@@ -55,6 +64,8 @@ public class Letter {
     private void set() {
         boolean[][] pattern = font.getByChar(currentValue);
         forRegion((u, v, x, y, z) -> {
+            if (pattern.length <= u) return;
+            if (pattern[0].length <= v) return;
             if (pattern[u][v]) {
                 Block block = world.getBlockAt(x, y, z);
                 block.setType(materialSet.getDigits());
