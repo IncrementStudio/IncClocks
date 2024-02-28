@@ -83,7 +83,8 @@ public class Clocks {
                 .replace("%h", "..")
                 .replace("%m", "..")
                 .replace("%s", "..")
-                .length(), gap, getRelative(1 + offsetX + paddingX, 1 + offsetY + paddingY, width - 1), u, v, font, materialSet
+                .replaceAll("\\$\\{.*?}", "")
+                .length(), gap, getRelative(1 + offsetX + paddingX, 1 + offsetY + paddingY, width - 1), u, v, font
         );
 
         new BukkitRunnable() {

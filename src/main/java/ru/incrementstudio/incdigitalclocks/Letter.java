@@ -19,7 +19,7 @@ public class Letter implements Listener {
     }
     private char currentValue = ' ';
     private Font font;
-    private MaterialSet materialSet;
+    private Material material;
     private Location location;
     public Location getLocation() {
         return location;
@@ -29,13 +29,13 @@ public class Letter implements Listener {
     private Vector u, v;
     private List<Block> blockList = new ArrayList<>();
 
-    public Letter(Location location, Vector u, Vector v, Font font, MaterialSet materialSet) {
+    public Letter(Location location, Vector u, Vector v, Font font, Material material) {
         this.location = location;
         world = location.getWorld();
         this.u = u;
         this.v = v;
         this.font = font;
-        this.materialSet = materialSet;
+        this.material = material;
         Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
     }
 
@@ -43,6 +43,10 @@ public class Letter implements Listener {
         currentValue = value;
         clear();
         set();
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 
     private void forRegion(RegionAction action) {
@@ -75,7 +79,7 @@ public class Letter implements Listener {
             if (pattern[0].length <= v) return;
             if (pattern[u][pattern[u].length - 1 - v]) {
                 Block block = world.getBlockAt(x, y, z);
-                block.setType(materialSet.getText());
+                block.setType(material);
                 blockList.add(block);
             }
         });
