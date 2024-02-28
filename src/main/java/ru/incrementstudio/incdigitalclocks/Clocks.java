@@ -56,27 +56,11 @@ public class Clocks {
                 .length(), gap, location, u, v, font, materialSet
         );
 
-        start = world.getBlockAt(location);
+        start = world.getBlockAt(getRelative(0, 0, 0));
         start.setType(Material.LIME_WOOL);
-        end = world.getBlockAt(location.clone().add(
-                timeString.getWidth() * u.getBlockX(),
-                timeString.getWidth() * u.getBlockY(),
-                timeString.getWidth() * u.getBlockZ()
-        ).add(
-                font.getHeight() * v.getBlockX(),
-                font.getHeight() * v.getBlockY(),
-                font.getHeight() * v.getBlockZ()
-        ));
+        end = world.getBlockAt(getRelative(timeString.getWidth(), font.getHeight(), 0));
         end.setType(Material.RED_WOOL);
-        center = world.getBlockAt(location.clone().add(
-                timeString.getWidth() * u.getBlockX() / 2.0,
-                timeString.getWidth() * u.getBlockY() / 2.0,
-                timeString.getWidth() * u.getBlockZ() / 2.0
-        ).add(
-                font.getHeight() * v.getBlockX() / 2.0,
-                font.getHeight() * v.getBlockY() / 2.0,
-                font.getHeight() * v.getBlockZ() / 2.0
-        ).add(d));
+        center = world.getBlockAt(getRelative(timeString.getWidth() / 2, font.getHeight() / 2, 1));
         center.setType(Material.BLUE_WOOL);
 
         new BukkitRunnable() {
@@ -107,6 +91,14 @@ public class Clocks {
                 }
             }
         }.runTaskTimer(Main.getInstance(), 0L, 1L);
+    }
+
+    private Location getRelative(int U, int V, int D) {
+        return location.clone().add(
+                U * u.getBlockX() + V * v.getBlockX() + D * d.getBlockX(),
+                U * u.getBlockY() + V * v.getBlockY() + D * d.getBlockY(),
+                U * u.getBlockZ() + V * v.getBlockZ() + D * d.getBlockZ()
+        );
     }
 
     public void clear() {
