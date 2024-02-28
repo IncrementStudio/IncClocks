@@ -13,6 +13,6 @@ public class Rotator implements Listener {
         if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             Main.getInstance().rotate(90);
         }
-        event.setCancelled(true);
+//        event.setCancelled(true);
     }
 }

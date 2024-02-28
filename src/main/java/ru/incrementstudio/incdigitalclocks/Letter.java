@@ -4,13 +4,15 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Letter {
+public class Letter implements Listener {
     @FunctionalInterface
     public interface RegionAction {
         void exec(int u, int v, int x, int y, int z);
@@ -34,6 +36,7 @@ public class Letter {
         this.v = v;
         this.font = font;
         this.materialSet = materialSet;
+        Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
     }
 
     public void setValue(char value) {
@@ -72,9 +75,15 @@ public class Letter {
             if (pattern[0].length <= v) return;
             if (pattern[u][pattern[u].length - 1 - v]) {
                 Block block = world.getBlockAt(x, y, z);
-                block.setType(materialSet.getDigits());
+                block.setType(materialSet.getText());
                 blockList.add(block);
             }
         });
+    }
+
+    @EventHandler
+    public void onDestroy(BlockBreakEvent event) {
+        if (blockList.contains(event.getBlock()))
+            event.setCancelled(true);
     }
 }
