@@ -9,6 +9,7 @@ import ru.incrementstudio.incdigitalclocks.ClocksPreview;
 import ru.incrementstudio.incdigitalclocks.Main;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Command implements CommandExecutor {
     @Override
@@ -23,8 +24,7 @@ public class Command implements CommandExecutor {
                             commandSender.sendMessage(ColorUtil.toColor("&cЧасы '&6" + strings[2] + "&c' не найдены!"));
                             return true;
                         }
-                        Config config = new Config(Main.getInstance(), clocksFile.getPath());
-                        ClocksPreview.addPlayer(player, config);
+                        ClocksPreview.addPlayer(player, strings[2]);
                     }
                 }
             }

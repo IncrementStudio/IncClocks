@@ -33,7 +33,6 @@ public class BlockString {
     }
 
     public void setValue(java.lang.String value) {
-        String nonColor = value.replaceAll("\\$\\{.*?}", "");
         Material material = Material.STONE;
         for (int i = 0; i < letters.length; i++) {
             if (value.charAt(i) == '$' && i < value.length() - 2) {
@@ -50,19 +49,12 @@ public class BlockString {
                 }
             }
             letters[i].setMaterial(material);
-            letters[i].setValue(nonColor.charAt(i));
+            letters[i].setValue(value.charAt(i));
         }
     }
 
     public int getWidth() {
-        int start = Math.abs((location.getBlockX() * u.getBlockX()) +
-        (location.getBlockY() * u.getBlockY()) +
-        (location.getBlockZ() * u.getBlockZ()));
-        int end = Math.abs((letters[letters.length - 1].getLocation().getBlockX() * u.getBlockX()) +
-        (letters[letters.length - 1].getLocation().getBlockY() * u.getBlockY()) +
-        (letters[letters.length - 1].getLocation().getBlockZ() * u.getBlockZ()));
-        int widthChar = font.getWidth();
-        return Math.max(start, end) - Math.min(start, end) + widthChar;
+        return font.getWidth() * letters.length + gap * (letters.length - 1);
     }
 
     public void clear() {

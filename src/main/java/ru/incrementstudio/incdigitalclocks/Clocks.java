@@ -54,10 +54,15 @@ public class Clocks implements Listener {
 
     private BukkitTask updateTask;
 
-    public Clocks(String name, Location location, Vector u, Vector v, Vector d) throws FileNotFoundException {
+    public Clocks(String name, Location location, Vector u, Vector v, Vector d) {
         File configFile = new File("plugins/IncDigitalClocks/clocks/" + name + ".yml");
-        if (!configFile.exists())
-            throw new FileNotFoundException("Clocks '" + configFile.getName() + "' not found!");
+        if (!configFile.exists()) {
+            try {
+                throw new FileNotFoundException("Clocks '" + configFile.getName() + "' not found!");
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
         config = new Config(Main.getInstance(), configFile.getPath());
 
         timeType = config.get().contains("time") ? TimeType.valueOf(config.get().getString("time")) : TimeType.REAL;

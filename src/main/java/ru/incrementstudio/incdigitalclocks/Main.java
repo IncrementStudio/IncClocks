@@ -13,6 +13,7 @@ import ru.incrementstudio.incdigitalclocks.commands.Completer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class Main extends JavaPlugin {
@@ -31,7 +32,10 @@ public final class Main extends JavaPlugin {
         return logger;
     }
 
-    Clocks clocks;
+    private List<Clocks> clocks = new ArrayList<>();
+    public List<Clocks> getClocks() {
+        return clocks;
+    }
 
     @Override
     public void onEnable() {
@@ -61,21 +65,12 @@ public final class Main extends JavaPlugin {
 
         getCommand("clocks").setExecutor(new Command());
         getCommand("clocks").setTabCompleter(new Completer());
-
-        try {
-            clocks = new Clocks("default",
-                    new Location(Bukkit.getWorld("world"), 130, 64, -97),
-                    new Vector(configManager.getConfig("config").get().getInt("UX"), configManager.getConfig("config").get().getInt("UY"), configManager.getConfig("config").get().getInt("UZ")),
-                    new Vector(configManager.getConfig("config").get().getInt("VX"), configManager.getConfig("config").get().getInt("VY"), configManager.getConfig("config").get().getInt("VZ")),
-                    new Vector(configManager.getConfig("config").get().getInt("DX"), configManager.getConfig("config").get().getInt("DY"), configManager.getConfig("config").get().getInt("DZ"))
-            );
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
     public void onDisable() {
+        for (Clocks clock : clocks)
+            clock.clear();
         clocks.clear();
     }
 }
