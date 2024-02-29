@@ -4,9 +4,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -28,8 +30,10 @@ public class Letter implements Listener {
     private World world;
     private Vector u, v;
     private List<Block> blockList = new ArrayList<>();
+    private final Clocks clocks;
 
-    public Letter(Location location, Vector u, Vector v, Font font, Material material) {
+    public Letter(Clocks clocks, Location location, Vector u, Vector v, Font font, Material material) {
+        this.clocks = clocks;
         this.location = location;
         world = location.getWorld();
         this.u = u;
@@ -86,8 +90,11 @@ public class Letter implements Listener {
     }
 
     @EventHandler
-    public void onDestroy(BlockBreakEvent event) {
-        if (blockList.contains(event.getBlock()))
+    public void onDestroy(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null) return;
+        if (blockList.contains(event.getClickedBlock()) && event.getAction() == Action.LEFT_CLICK_BLOCK) {
             event.setCancelled(true);
+            clocks.onBreak(event);
+        }
     }
 }

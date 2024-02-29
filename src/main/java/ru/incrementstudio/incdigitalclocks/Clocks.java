@@ -6,10 +6,24 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import ru.incrementstudio.incapi.configs.Config;
+import ru.incrementstudio.incapi.menu.Button;
+import ru.incrementstudio.incapi.menu.Item;
+import ru.incrementstudio.incapi.menu.Menu;
+import ru.incrementstudio.incapi.menu.Page;
 import ru.incrementstudio.incapi.utils.MathUtil;
+import ru.incrementstudio.incapi.utils.builders.ItemBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Clocks {
+public class Clocks implements Listener {
     private enum TimeType {
         REAL, GAME
     }
@@ -36,6 +50,9 @@ public class Clocks {
     private List<Block> blockList = new ArrayList<>();
     private int paddingX, paddingY, width;
     private int offsetX, offsetY;
+    private int borderRadius;
+
+    private BukkitTask updateTask;
 
     public Clocks(String name, Location location, Vector u, Vector v, Vector d) throws FileNotFoundException {
         File configFile = new File("plugins/IncDigitalClocks/clocks/" + name + ".yml");
@@ -79,7 +96,7 @@ public class Clocks {
         font = Font.getFont(config.get().contains("text.font") ? config.get().getString("text.font") : "", config.get().contains("text.text-size") ? (float) config.get().getDouble("text.text-size") : 16);
         this.materialSet = new MaterialSet(config.get().getConfigurationSection("materials"));
 
-        timeString = new BlockString(format
+        timeString = new BlockString(this, format
                 .replace("%h", "..")
                 .replace("%m", "..")
                 .replace("%s", "..")
@@ -87,7 +104,13 @@ public class Clocks {
                 .length(), gap, getRelative(1 + offsetX + paddingX, 1 + offsetY + paddingY, width - 1), u, v, font
         );
 
-        new BukkitRunnable() {
+        borderRadius = Math.min((paddingX * 2 + timeString.getWidth() + 2) / 2,
+                Math.min((paddingY * 2 + font.getHeight() + 2) / 2,
+                        config.get().contains("form.border-radius") ? config.get().getInt("form.border-radius") : 0));
+
+        Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
+
+        updateTask = new BukkitRunnable() {
             @Override
             public void run() {
                 switch (timeType) {
@@ -121,12 +144,32 @@ public class Clocks {
                 for (int D = 0; D < width; D++) {
                     Location blockLocation = getRelative(U, V, D);
                     Block block = world.getBlockAt(blockLocation);
-                    if (U == 0 || U == paddingX * 2 + timeString.getWidth() + 1 || V == 0 || V == paddingY * 2 + font.getHeight() + 1)
+                    if ((U >= borderRadius || V >= borderRadius) &&
+                            (U >= borderRadius || V <= paddingY * 2 + font.getHeight() + 2 - borderRadius - 1) &&
+                            (U <= paddingX * 2 + timeString.getWidth() + 2 - borderRadius - 1 || V >= borderRadius) &&
+                            (U <= paddingX * 2 + timeString.getWidth() + 2 - borderRadius - 1 || V <= paddingY * 2 + font.getHeight() + 2 - borderRadius - 1)
+                    ) {
+                        if (U == 0 || U == paddingX * 2 + timeString.getWidth() + 1 || V == 0 || V == paddingY * 2 + font.getHeight() + 1 || D == 0)
+                            block.setType(materialSet.getSides());
+                        else if (D < width - 1)
+                            block.setType(materialSet.getBack());
+                        blockList.add(block);
+                    } else if ((Math.pow(U - borderRadius, 2) + Math.pow(V - borderRadius, 2) < Math.pow(borderRadius - 1, 2)) ||
+                            (Math.pow(U - (paddingX * 2 + timeString.getWidth() + 2 - borderRadius - 1), 2) + Math.pow(V - borderRadius, 2) < Math.pow(borderRadius - 1, 2)) ||
+                            (Math.pow(U - borderRadius, 2) + Math.pow(V - (paddingY * 2 + font.getHeight() + 2 - borderRadius - 1), 2) < Math.pow(borderRadius - 1, 2)) ||
+                            (Math.pow(U - (paddingX * 2 + timeString.getWidth() + 2 - borderRadius - 1), 2) + Math.pow(V - (paddingY * 2 + font.getHeight() + 2 - borderRadius - 1), 2) < Math.pow(borderRadius - 1, 2))) {
+                        if (D == 0)
+                            block.setType(materialSet.getSides());
+                        else if (D < width - 1)
+                            block.setType(materialSet.getBack());
+                        blockList.add(block);
+                    } else if ((Math.pow(U - borderRadius, 2) + Math.pow(V - borderRadius, 2) < Math.pow(borderRadius, 2)) ||
+                            (Math.pow(U - (paddingX * 2 + timeString.getWidth() + 2 - borderRadius - 1), 2) + Math.pow(V - borderRadius, 2) < Math.pow(borderRadius, 2)) ||
+                            (Math.pow(U - borderRadius, 2) + Math.pow(V - (paddingY * 2 + font.getHeight() + 2 - borderRadius - 1), 2) < Math.pow(borderRadius, 2)) ||
+                            (Math.pow(U - (paddingX * 2 + timeString.getWidth() + 2 - borderRadius - 1), 2) + Math.pow(V - (paddingY * 2 + font.getHeight() + 2 - borderRadius - 1), 2) < Math.pow(borderRadius, 2))) {
                         block.setType(materialSet.getSides());
-                    else if (D < width - 1) {
-                        block.setType(materialSet.getBack());
+                        blockList.add(block);
                     }
-                    blockList.add(block);
                 }
             }
         }
@@ -141,9 +184,63 @@ public class Clocks {
     }
 
     public void clear() {
+        updateTask.cancel();
         timeString.clear();
         for (Block block : blockList)
             block.setType(Material.AIR);
         blockList.clear();
+    }
+
+    public void onBreak(PlayerInteractEvent event) {
+        if (event.getPlayer().hasPermission("clocks.destroy")) {
+            Menu menu = new Menu()
+                    .addPage(
+                            new Page("Вы хотите убрать часы?", 45)
+                                    .setSlots(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
+                                                    .setName(" ")
+                                                    .build(),
+                                            0, 1, 2, 3, 4, 5, 6, 7, 8,
+                                            9, 13, 17,
+                                            18, 22, 26,
+                                            27, 31, 35,
+                                            36, 37, 38, 39, 40, 41, 42, 43, 44
+                                    ).setSlots(new Button(
+                                            new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+                                                       .setName("&cНЕТ")
+                                                       .build()) {
+                                                   @Override
+                                                   public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
+                                                        player.closeInventory();
+                                                   }
+                                               },
+                                    10, 11, 12,
+                                    19, 20, 21,
+                                    28, 29, 30
+                                    ).setSlots(new Button(
+                                            new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+                                                       .setName("&aДА")
+                                                       .build()) {
+                                                   @Override
+                                                   public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
+                                                       player.closeInventory();
+                                                       clear();
+                                                   }
+                                               },
+                                            14, 15, 16,
+                                            23, 24, 25,
+                                            32, 33, 34
+                                    ).apply()
+                    );
+            menu.show(event.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void onDestroy(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null) return;
+        if (blockList.contains(event.getClickedBlock()) && event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            event.setCancelled(true);
+            onBreak(event);
+        }
     }
 }
