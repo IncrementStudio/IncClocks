@@ -1,9 +1,6 @@
 package ru.incrementstudio.incdigitalclocks;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 import ru.incrementstudio.incapi.Logger;
 import ru.incrementstudio.incapi.configs.ConfigManager;
@@ -12,7 +9,6 @@ import ru.incrementstudio.incdigitalclocks.commands.Command;
 import ru.incrementstudio.incdigitalclocks.commands.Completer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +48,7 @@ public final class Main extends JavaPlugin {
         if (!timersDirectory.exists()) {
             timersDirectory.mkdirs();
         }
-        File stopwatchDirectory = new File("plugins/IncDigitalClocks/stopwatch");
+        File stopwatchDirectory = new File("plugins/IncDigitalClocks/stopwatches");
         if (!stopwatchDirectory.exists()) {
             stopwatchDirectory.mkdirs();
         }

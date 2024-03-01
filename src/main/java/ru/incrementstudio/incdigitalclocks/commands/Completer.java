@@ -41,7 +41,7 @@ public class Completer implements TabCompleter {
                             .map(x -> x.substring(0, x.lastIndexOf('.')))
                             .collect(Collectors.toList());
                 } else if (strings[1].equals("stopwatch")) {
-                    File stopwatchDirectory = new File("plugins/IncDigitalClocks/stopwatch");
+                    File stopwatchDirectory = new File("plugins/IncDigitalClocks/stopwatches");
                     if (!stopwatchDirectory.exists()) {
                         stopwatchDirectory.mkdirs();
                     }
