@@ -50,7 +50,7 @@ public class Clocks implements Listener {
     private List<Block> blockList = new ArrayList<>();
     private int paddingX, paddingY, width;
     private int offsetX, offsetY;
-    private int borderRadius;
+    private int borderRadius, timeZone;
 
     private BukkitTask updateTask;
 
@@ -66,6 +66,7 @@ public class Clocks implements Listener {
         config = new Config(Main.getInstance(), configFile.getPath());
 
         timeType = config.get().contains("time") ? TimeType.valueOf(config.get().getString("time")) : TimeType.REAL;
+        timeZone = config.get().contains("time-zone") ? config.get().getInt("time-zone") : 0;
         format = config.get().contains("format") ? config.get().getString("format") : "%h:%m";
         gap = config.get().contains("text.letter-spacing") ? config.get().getInt("text.letter-spacing") : -4;
         if (config.get().contains("form.padding")) {
@@ -130,7 +131,7 @@ public class Clocks implements Listener {
                         );
                         break;
                     case REAL:
-                        long hoursR = new Date(System.currentTimeMillis()).getHours();
+                        long hoursR = (new Date(System.currentTimeMillis()).getHours() + timeZone) % 24;
                         long minutesR = new Date(System.currentTimeMillis()).getMinutes();
                         long secondsR = new Date(System.currentTimeMillis()).getSeconds();
                         timeString.setValue(

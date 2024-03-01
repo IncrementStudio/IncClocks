@@ -3,6 +3,7 @@ ru\incrementstudio\incdigitalclocks\BlockString.class
 ru\incrementstudio\incdigitalclocks\commands\Command.class
 ru\incrementstudio\incdigitalclocks\Main.class
 ru\incrementstudio\incdigitalclocks\Clocks$TimeType.class
+ru\incrementstudio\incdigitalclocks\ClocksData.class
 ru\incrementstudio\incdigitalclocks\Letter.class
 ru\incrementstudio\incdigitalclocks\MaterialSet.class
 ru\incrementstudio\incdigitalclocks\Clocks$4.class

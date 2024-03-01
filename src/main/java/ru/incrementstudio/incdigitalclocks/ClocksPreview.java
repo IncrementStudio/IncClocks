@@ -15,18 +15,21 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import ru.incrementstudio.incapi.configs.Config;
+import ru.incrementstudio.incapi.utils.ColorUtil;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ClocksPreview implements Listener {
+    private static final int distance = 100;
     private static Map<Player, Map.Entry<ClocksData, Integer>> players = new HashMap<>();
 
     public static void addPlayer(Player player, String name) {
+        if (players.containsKey(player)) {
+            player.sendMessage(ColorUtil.toColor("&eВы уже устанавливаете часы!"));
+            return;
+        }
         ClocksData clocksData = new ClocksData(name);
         players.put(player, Map.entry(clocksData, 0));
         new BukkitRunnable() {
@@ -36,7 +39,7 @@ public class ClocksPreview implements Listener {
                     cancel();
                     return;
                 }
-                Block target = player.getTargetBlock(null, 25);
+                Block target = player.getTargetBlock(null, distance);
                 Vector u = u(player);
                 Vector v = v(player);
                 Vector d = d(player);
@@ -65,7 +68,7 @@ public class ClocksPreview implements Listener {
                                         .add(U * u.getBlockX() + V * v.getBlockX() + D * d.getBlockX(),
                                                 U * u.getBlockY() + V * v.getBlockY() + D * d.getBlockY(),
                                                 U * u.getBlockZ() + V * v.getBlockZ() + D * d.getBlockZ()
-                                        ), 0, 1, 1, 1, new Particle.DustOptions(empty ? Color.BLUE : Color.RED, 2f)
+                                        ), 0, 1, 1, 1, new Particle.DustOptions(empty ? Color.LIME : Color.RED, 1f)
                                 );
                             }
                         }
@@ -76,8 +79,8 @@ public class ClocksPreview implements Listener {
     }
 
     public static BlockFace getBlockFace(Player player) {
-        List<Block> lastTwoTargetBlocks = player.getLastTwoTargetBlocks(null, 25);
-        if (lastTwoTargetBlocks.size() != 2 || !lastTwoTargetBlocks.get(1).getType().isOccluding()) return null;
+        List<Block> lastTwoTargetBlocks = player.getLastTwoTargetBlocks(null, distance);
+        if (lastTwoTargetBlocks.size() != 2 || !lastTwoTargetBlocks.get(1).getType().isSolid()) return null;
         Block targetBlock = lastTwoTargetBlocks.get(1);
         Block adjacentBlock = lastTwoTargetBlocks.get(0);
         return targetBlock.getFace(adjacentBlock);
@@ -134,7 +137,7 @@ public class ClocksPreview implements Listener {
         if (event.getHand() != EquipmentSlot.HAND) return;
         if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             if (event.getPlayer().isSneaking()) {
-                Block target = event.getPlayer().getTargetBlock(null, 25);
+                Block target = event.getPlayer().getTargetBlock(null, distance);
                 Vector u = u(event.getPlayer());
                 Vector v = v(event.getPlayer());
                 Vector d = d(event.getPlayer());

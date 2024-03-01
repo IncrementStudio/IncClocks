@@ -41,7 +41,8 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         instance = this;
         logger = new Logger(this);
-        configManager = new ConfigManager(this, List.of("config"));
+        configManager = new ConfigManager(this, List.of("database"));
+        configManager.updateAll();
 
         File clocksDirectory = new File("plugins/IncDigitalClocks/clocks");
         if (!clocksDirectory.exists()) {
