@@ -67,7 +67,7 @@ public class Clocks implements Listener {
 
         timeType = config.get().contains("time") ? TimeType.valueOf(config.get().getString("time")) : TimeType.REAL;
         timeZone = config.get().contains("time-zone") ? config.get().getInt("time-zone") : 0;
-        format = config.get().contains("format") ? config.get().getString("format") : "%h:%m";
+        format = config.get().contains("format") ? config.get().getString("format") : "${LIME_CONCRETE}%h:%m";
         gap = config.get().contains("text.letter-spacing") ? config.get().getInt("text.letter-spacing") : -4;
         if (config.get().contains("form.padding")) {
             if (config.get().isConfigurationSection("form.padding")) {
