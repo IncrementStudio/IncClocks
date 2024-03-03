@@ -1,16 +1,18 @@
-package ru.incrementstudio.incdigitalclocks;
+package ru.incrementstudio.incclocks;
 
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ru.incrementstudio.incapi.Logger;
 import ru.incrementstudio.incapi.configs.ConfigManager;
 import ru.incrementstudio.incapi.menu.MenuListener;
-import ru.incrementstudio.incdigitalclocks.commands.Command;
-import ru.incrementstudio.incdigitalclocks.commands.Completer;
+import ru.incrementstudio.incclocks.commands.Command;
+import ru.incrementstudio.incclocks.commands.Completer;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public final class Main extends JavaPlugin {
     private static Main instance;
@@ -40,19 +42,19 @@ public final class Main extends JavaPlugin {
         configManager = new ConfigManager(this, List.of("database"));
         configManager.updateAll();
 
-        File clocksDirectory = new File("plugins/IncDigitalClocks/clocks");
+        File clocksDirectory = new File("plugins/IncClocks/clocks");
         if (!clocksDirectory.exists()) {
             clocksDirectory.mkdirs();
         }
-        File timersDirectory = new File("plugins/IncDigitalClocks/timers");
+        File timersDirectory = new File("plugins/IncClocks/timers");
         if (!timersDirectory.exists()) {
             timersDirectory.mkdirs();
         }
-        File stopwatchDirectory = new File("plugins/IncDigitalClocks/stopwatches");
+        File stopwatchDirectory = new File("plugins/IncClocks/stopwatches");
         if (!stopwatchDirectory.exists()) {
             stopwatchDirectory.mkdirs();
         }
-        File digitSetsDirectory = new File("plugins/IncDigitalClocks/fonts");
+        File digitSetsDirectory = new File("plugins/IncClocks/fonts");
         if (!digitSetsDirectory.exists()) {
             digitSetsDirectory.mkdirs();
         }
@@ -62,6 +64,10 @@ public final class Main extends JavaPlugin {
 
         getCommand("clocks").setExecutor(new Command());
         getCommand("clocks").setTabCompleter(new Completer());
+
+        for (Map.Entry<World, List<Database.StorageClockData>> entry : Database.load().entrySet())
+            for (Database.StorageClockData data : entry.getValue())
+                new Clocks(data.clocks, data.location, data.u, data.v, data.d);
     }
 
     @Override

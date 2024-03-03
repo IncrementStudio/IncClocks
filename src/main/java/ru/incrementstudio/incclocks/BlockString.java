@@ -1,4 +1,4 @@
-package ru.incrementstudio.incdigitalclocks;
+package ru.incrementstudio.incclocks;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

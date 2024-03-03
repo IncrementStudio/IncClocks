@@ -1,4 +1,4 @@
-package ru.incrementstudio.incdigitalclocks;
+package ru.incrementstudio.incclocks;
 
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -27,7 +27,7 @@ public class ClocksPreview implements Listener {
 
     public static void addPlayer(Player player, String name) {
         if (players.containsKey(player)) {
-            player.sendMessage(ColorUtil.toColor("&eВы уже устанавливаете часы!"));
+            player.sendMessage(ColorUtil.toColor("&9[&bIncClocks&9] &cВы уже устанавливаете часы!"));
             return;
         }
         ClocksData clocksData = new ClocksData(name);
@@ -46,7 +46,7 @@ public class ClocksPreview implements Listener {
                 if (d == null || u == null || v == null) return;
                 Location start = target.getLocation().add(d);
                 boolean empty = true;
-                for (int U = 0; U < clocksData.getPaddingX() * 2 + clocksData.getuWidth() + 2; U++) {
+                for (int U = 0; U < clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 2; U++) {
                     for (int V = 0; V < clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 2; V++) {
                         for (int D = 0; D < clocksData.getWidth(); D++) {
                             if (start.clone().add(U * u.getBlockX() + V * v.getBlockX() + D * d.getBlockX(),
@@ -57,12 +57,12 @@ public class ClocksPreview implements Listener {
                         }
                     }
                 }
-                for (int U = 0; U < clocksData.getPaddingX() * 2 + clocksData.getuWidth() + 2; U++) {
+                for (int U = 0; U < clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 2; U++) {
                     for (int V = 0; V < clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 2; V++) {
                         for (int D = 0; D < clocksData.getWidth(); D++) {
-                            if (((U == 0 || U == clocksData.getPaddingX() * 2 + clocksData.getuWidth() + 1) && ((V == 0 || V == clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 1) || (D == 0 || D == clocksData.getWidth() - 1))) ||
-                                    ((V == 0 || V == clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 1) && ((U == 0 || U == clocksData.getPaddingX() * 2 + clocksData.getuWidth() + 1) || (D == 0 || D == clocksData.getWidth() - 1))) ||
-                                    ((D == 0 || D == clocksData.getWidth() - 1) && ((V == 0 || V == clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 1) || (U == 0 || U == clocksData.getPaddingX() * 2 + clocksData.getuWidth() + 1)))) {
+                            if (((U == 0 || U == clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 1) && ((V == 0 || V == clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 1) || (D == 0 || D == clocksData.getWidth() - 1))) ||
+                                    ((V == 0 || V == clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 1) && ((U == 0 || U == clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 1) || (D == 0 || D == clocksData.getWidth() - 1))) ||
+                                    ((D == 0 || D == clocksData.getWidth() - 1) && ((V == 0 || V == clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 1) || (U == 0 || U == clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 1)))) {
                                 player.spawnParticle(Particle.REDSTONE, start.clone()
                                         .add(0.5, 0.5, 0.5)
                                         .add(U * u.getBlockX() + V * v.getBlockX() + D * d.getBlockX(),
@@ -147,7 +147,7 @@ public class ClocksPreview implements Listener {
                 ClocksData clocksData = players.get(event.getPlayer()).getKey();
 
                 boolean empty = true;
-                for (int U = 0; U < clocksData.getPaddingX() * 2 + clocksData.getuWidth() + 2; U++) {
+                for (int U = 0; U < clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 2; U++) {
                     for (int V = 0; V < clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 2; V++) {
                         for (int D = 0; D < clocksData.getWidth(); D++) {
                             if (start.clone().add(U * u.getBlockX() + V * v.getBlockX() + D * d.getBlockX(),
@@ -159,8 +159,8 @@ public class ClocksPreview implements Listener {
                     }
                 }
                 if (empty) {
-                    Clocks clocks = new Clocks(clocksData.getName(), start, u, v, d);
-                    Main.getInstance().getClocks().add(clocks);
+                    new Clocks(clocksData.getName(), start, u, v, d);
+                    Database.addClocks(clocksData.getName(), start, u, v, d);
                     players.remove(event.getPlayer());
                 }
             } else {

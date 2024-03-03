@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/IncDigitalClocks.iml" filepath="$PROJECT_DIR$/IncDigitalClocks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/IncClocks.iml" filepath="$PROJECT_DIR$/IncClocks.iml" />
     </modules>
   </component>
 </project>

@@ -1,4 +1,4 @@
-package ru.incrementstudio.incdigitalclocks;
+package ru.incrementstudio.incclocks;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -24,7 +24,7 @@ public class Font {
 
     private Font(String setName, float size) throws IllegalArgumentException {
         this.size = size;
-        fontFile = new File("plugins/IncDigitalClocks/fonts/" + setName + ".ttf");
+        fontFile = new File("plugins/IncClocks/fonts/" + setName + ".ttf");
         if (!fontFile.exists())
             throw new IllegalArgumentException("Font '" + fontFile.getName() + "' not found!");
         try {

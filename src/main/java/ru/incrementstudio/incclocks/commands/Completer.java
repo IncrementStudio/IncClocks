@@ -1,4 +1,4 @@
-package ru.incrementstudio.incdigitalclocks.commands;
+package ru.incrementstudio.incclocks.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,15 +13,16 @@ import java.util.stream.Collectors;
 public class Completer implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+        if (!commandSender.hasPermission("clocks.admin")) return new ArrayList<>();
         if (strings.length == 1) {
-            return List.of("place");
+            return List.of("place", "reload");
         } else if (strings.length == 2) {
             if (strings[0].equals("place"))
                 return List.of("clocks", "timer", "stopwatch");
         } else if (strings.length == 3) {
             if (strings[0].equals("place")) {
                 if (strings[1].equals("clocks")) {
-                    File clocksDirectory = new File("plugins/IncDigitalClocks/clocks");
+                    File clocksDirectory = new File("plugins/IncClocks/clocks");
                     if (!clocksDirectory.exists()) {
                         clocksDirectory.mkdirs();
                     }
@@ -31,7 +32,7 @@ public class Completer implements TabCompleter {
                             .map(x -> x.substring(0, x.lastIndexOf('.')))
                             .collect(Collectors.toList());
                 } else if (strings[1].equals("timer")) {
-                    File timersDirectory = new File("plugins/IncDigitalClocks/timers");
+                    File timersDirectory = new File("plugins/IncClocks/timers");
                     if (!timersDirectory.exists()) {
                         timersDirectory.mkdirs();
                     }
@@ -41,7 +42,7 @@ public class Completer implements TabCompleter {
                             .map(x -> x.substring(0, x.lastIndexOf('.')))
                             .collect(Collectors.toList());
                 } else if (strings[1].equals("stopwatch")) {
-                    File stopwatchDirectory = new File("plugins/IncDigitalClocks/stopwatches");
+                    File stopwatchDirectory = new File("plugins/IncClocks/stopwatches");
                     if (!stopwatchDirectory.exists()) {
                         stopwatchDirectory.mkdirs();
                     }

@@ -1,9 +1,10 @@
-name: IncDigitalClocks
+name: IncClocks
 version: '1.0'
-main: ru.incrementstudio.incdigitalclocks.Main
+main: ru.incrementstudio.incclocks.Main
 api-version: '1.20'
 authors: [IncrementStudio++]
-description: Плагин на цифровые часы для турнира от Bebr0
+description: Плагин на цифровые часы для турнира от BeBr0
 website: incrementstudio.ru
 commands:
-  clocks:
+  incclocks:
+    aliases: clocks

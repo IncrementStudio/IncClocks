@@ -1,4 +1,4 @@
-package ru.incrementstudio.incdigitalclocks;
+package ru.incrementstudio.incclocks;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -7,7 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
@@ -83,6 +82,7 @@ public class Letter implements Listener {
             if (pattern[0].length <= v) return;
             if (pattern[u][pattern[u].length - 1 - v]) {
                 Block block = world.getBlockAt(x, y, z);
+                if (clocks.getBlockList().contains(block)) return;
                 block.setType(material);
                 blockList.add(block);
             }
