@@ -1,23 +1,25 @@
-package ru.incrementstudio.incclocks;
+package ru.incrementstudio.incclocks.bases;
 
 import ru.incrementstudio.incapi.configs.Config;
+import ru.incrementstudio.incclocks.Font;
+import ru.incrementstudio.incclocks.Main;
+import ru.incrementstudio.incclocks.MaterialSet;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class ClocksData {
+public abstract class BaseData {
     public enum TimeType {
         REAL, GAME
     }
-    private final String name, format;
-    private final Config config;
-    private final TimeType timeType;
-    private final int timeZone;
-    private int offsetX = 0, offsetY = 0;
-    private final MaterialSet materialSet;
-    private final int gap, width, borderRadius;
-    private int paddingX = 0, paddingY = 0;
-    private final Font font;
+    protected final String name, format;
+    protected final Config config;
+    protected final TimeType timeType;
+    protected final int offsetX, offsetY;
+    protected final MaterialSet materialSet;
+    protected final int gap, width, borderRadius;
+    protected final int paddingX, paddingY;
+    protected final Font font;
 
     public String getName() {
         return name;
@@ -44,9 +46,6 @@ public class ClocksData {
     public TimeType getTimeType() {
         return timeType;
     }
-    public int getTimeZone() {
-        return timeZone;
-    }
     public int getOffsetX() {
         return offsetX;
     }
@@ -72,20 +71,11 @@ public class ClocksData {
         return font;
     }
 
-    public ClocksData(String name) {
-        File configFile = new File("plugins/IncClocks/clocks/" + name + ".yml");
-        if (!configFile.exists()) {
-            try {
-                throw new FileNotFoundException("Clocks '" + configFile.getName() + "' not found!");
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    public BaseData(String name, File configFile) {
         this.name = name;
         config = new Config(Main.getInstance(), configFile.getPath());
 
         timeType = config.get().contains("time") ? TimeType.valueOf(config.get().getString("time")) : TimeType.REAL;
-        timeZone = config.get().contains("time-zone") ? config.get().getInt("time-zone") : 0;
         format = config.get().contains("format") ? config.get().getString("format") : "${LIME_CONCRETE}%h:%m";
         gap = config.get().contains("text.letter-spacing") ? config.get().getInt("text.letter-spacing") : 0;
         if (config.get().contains("form.padding")) {
@@ -96,6 +86,9 @@ public class ClocksData {
                 paddingX = config.get().getInt("form.padding");
                 paddingY = config.get().getInt("form.padding");
             }
+        } else {
+            paddingX = 0;
+            paddingY = 0;
         }
         if (config.get().contains("text.offset")) {
             if (config.get().isConfigurationSection("text.offset")) {
@@ -105,6 +98,9 @@ public class ClocksData {
                 offsetX = config.get().getInt("text.offset");
                 offsetY = config.get().getInt("text.offset");
             }
+        } else {
+            offsetX = 0;
+            offsetY = 0;
         }
         width = config.get().contains("form.width") ? Math.max(config.get().getInt("form.width"), 3) : 5;
         font = Font.getFont(config.get().contains("text.font") ? config.get().getString("text.font") : "", config.get().contains("text.text-size") ? (float) config.get().getDouble("text.text-size") : 16);

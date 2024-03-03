@@ -15,7 +15,7 @@ public class Completer implements TabCompleter {
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
         if (!commandSender.hasPermission("clocks.admin")) return new ArrayList<>();
         if (strings.length == 1) {
-            return List.of("place", "reload");
+            return List.of("place", "reload", "help");
         } else if (strings.length == 2) {
             if (strings[0].equals("place"))
                 return List.of("clocks", "timer", "stopwatch");

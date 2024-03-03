@@ -1,4 +1,4 @@
-package ru.incrementstudio.incclocks;
+package ru.incrementstudio.incclocks.stopwatches;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -7,19 +7,20 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
 import ru.incrementstudio.incapi.configs.Config;
 import ru.incrementstudio.incapi.utils.ConfigUtil;
+import ru.incrementstudio.incclocks.Main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Database {
-    public static class StorageClockData {
-        public String clocks;
+public class StopwatchDatabase {
+    public static class StorageData {
+        public String name;
         public Location location;
         public Vector u, v, d;
-        public StorageClockData(String clocks, Location location, Vector u, Vector v, Vector d) {
-            this.clocks = clocks;
+        public StorageData(String name, Location location, Vector u, Vector v, Vector d) {
+            this.name = name;
             this.location = location;
             this.u = u;
             this.v = v;
@@ -27,9 +28,8 @@ public class Database {
         }
     }
 
-    public static void addClocks(String clocks, Location location, Vector U, Vector V, Vector D) {
-        Config database = Main.getConfigManager().getConfig("database");
-        StorageClockData storageClockData = new StorageClockData(clocks, location, U, V, D);
+    public static void add(String clocks, Location location, Vector U, Vector V, Vector D) {
+        Config database = Main.getConfigManager().getConfig("stopwatches");
         if (!database.get().contains(location.getWorld().getName()))
             database.get().createSection(location.getWorld().getName());
         ConfigurationSection worldSection = database.get().getConfigurationSection(location.getWorld().getName());
@@ -55,22 +55,20 @@ public class Database {
         database.save();
     }
 
-    public static void removeClocks(Location location) {
-        Config database = Main.getConfigManager().getConfig("database");
+    public static void remove(Location location) {
+        Config database = Main.getConfigManager().getConfig("stopwatches");
         String key = ConfigUtil.combinePath('|',
                 String.valueOf(location.getBlockX()),
                 String.valueOf(location.getBlockY()),
                 String.valueOf(location.getBlockZ())
         );
-//        if (!database.get().contains(ConfigUtil.combinePath(location.getWorld().getName(), key)))
-//            return;
         database.get().set(ConfigUtil.combinePath(location.getWorld().getName(), key), null);
         database.save();
     }
 
-    public static Map<World, List<StorageClockData>> load() {
-        Config database = Main.getConfigManager().getConfig("database");
-        Map<World, List<StorageClockData>> result = new HashMap<>();
+    public static Map<World, List<StorageData>> load() {
+        Config database = Main.getConfigManager().getConfig("stopwatches");
+        Map<World, List<StorageData>> result = new HashMap<>();
         for (String world : database.get().getKeys(false)) {
             World worldObj = Bukkit.getWorld(world);
             if (worldObj == null) continue;
@@ -111,11 +109,10 @@ public class Database {
                 } catch (NumberFormatException e) {
                     continue;
                 }
-                StorageClockData storageClockData = new StorageClockData(name, locationObj, U, V, D);
-
+                StorageData storageData = new StorageData(name, locationObj, U, V, D);
                 if (!result.containsKey(worldObj))
                     result.put(worldObj, new ArrayList<>());
-                result.get(worldObj).add(storageClockData);
+                result.get(worldObj).add(storageData);
             }
         }
         return result;

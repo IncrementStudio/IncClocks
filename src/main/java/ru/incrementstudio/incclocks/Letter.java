@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
+import ru.incrementstudio.incclocks.bases.Base;
+import ru.incrementstudio.incclocks.clocks.Clocks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +24,14 @@ public class Letter implements Listener {
     private Font font;
     private Material material;
     private Location location;
-    public Location getLocation() {
-        return location;
-    }
 
     private World world;
     private Vector u, v;
     private List<Block> blockList = new ArrayList<>();
-    private final Clocks clocks;
+    private final Base base;
 
-    public Letter(Clocks clocks, Location location, Vector u, Vector v, Font font, Material material) {
-        this.clocks = clocks;
+    public Letter(Base base, Location location, Vector u, Vector v, Font font, Material material) {
+        this.base = base;
         this.location = location;
         world = location.getWorld();
         this.u = u;
@@ -82,7 +81,7 @@ public class Letter implements Listener {
             if (pattern[0].length <= v) return;
             if (pattern[u][pattern[u].length - 1 - v]) {
                 Block block = world.getBlockAt(x, y, z);
-                if (clocks.getBlockList().contains(block)) return;
+                if (base.getBlockList().contains(block)) return;
                 block.setType(material);
                 blockList.add(block);
             }
@@ -94,7 +93,7 @@ public class Letter implements Listener {
         if (event.getClickedBlock() == null) return;
         if (blockList.contains(event.getClickedBlock()) && event.getAction() == Action.LEFT_CLICK_BLOCK) {
             event.setCancelled(true);
-            clocks.onBreak(event);
+            base.onBreak(event);
         }
     }
 }

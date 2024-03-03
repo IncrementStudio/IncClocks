@@ -1,4 +1,4 @@
-package ru.incrementstudio.incclocks;
+package ru.incrementstudio.incclocks.bases;
 
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -16,22 +16,22 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import ru.incrementstudio.incapi.utils.ColorUtil;
+import ru.incrementstudio.incclocks.Main;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ClocksPreview implements Listener {
-    private static final int distance = 100;
-    private static Map<Player, Map.Entry<ClocksData, Integer>> players = new HashMap<>();
+public abstract class BasePreview implements Listener {
+    private final int distance = 100;
+    private Map<Player, Map.Entry<BaseData, Integer>> players = new HashMap<>();
 
-    public static void addPlayer(Player player, String name) {
+    public void addPlayer(BaseData data, Player player) {
         if (players.containsKey(player)) {
-            player.sendMessage(ColorUtil.toColor("&9[&bIncClocks&9] &cВы уже устанавливаете часы!"));
+            player.sendMessage(ColorUtil.toColor("&9[&bIncClocks&9] &cСейчас вы не можете этого сделать!"));
             return;
         }
-        ClocksData clocksData = new ClocksData(name);
-        players.put(player, Map.entry(clocksData, 0));
+        players.put(player, Map.entry(data, 0));
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -46,9 +46,9 @@ public class ClocksPreview implements Listener {
                 if (d == null || u == null || v == null) return;
                 Location start = target.getLocation().add(d);
                 boolean empty = true;
-                for (int U = 0; U < clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 2; U++) {
-                    for (int V = 0; V < clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 2; V++) {
-                        for (int D = 0; D < clocksData.getWidth(); D++) {
+                for (int U = 0; U < data.getPaddingX() * 2 + data.getUWidth() + 2; U++) {
+                    for (int V = 0; V < data.getPaddingY() * 2 + data.getFont().getHeight() + 2; V++) {
+                        for (int D = 0; D < data.getWidth(); D++) {
                             if (start.clone().add(U * u.getBlockX() + V * v.getBlockX() + D * d.getBlockX(),
                                     U * u.getBlockY() + V * v.getBlockY() + D * d.getBlockY(),
                                     U * u.getBlockZ() + V * v.getBlockZ() + D * d.getBlockZ()
@@ -57,12 +57,12 @@ public class ClocksPreview implements Listener {
                         }
                     }
                 }
-                for (int U = 0; U < clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 2; U++) {
-                    for (int V = 0; V < clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 2; V++) {
-                        for (int D = 0; D < clocksData.getWidth(); D++) {
-                            if (((U == 0 || U == clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 1) && ((V == 0 || V == clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 1) || (D == 0 || D == clocksData.getWidth() - 1))) ||
-                                    ((V == 0 || V == clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 1) && ((U == 0 || U == clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 1) || (D == 0 || D == clocksData.getWidth() - 1))) ||
-                                    ((D == 0 || D == clocksData.getWidth() - 1) && ((V == 0 || V == clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 1) || (U == 0 || U == clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 1)))) {
+                for (int U = 0; U < data.getPaddingX() * 2 + data.getUWidth() + 2; U++) {
+                    for (int V = 0; V < data.getPaddingY() * 2 + data.getFont().getHeight() + 2; V++) {
+                        for (int D = 0; D < data.getWidth(); D++) {
+                            if (((U == 0 || U == data.getPaddingX() * 2 + data.getUWidth() + 1) && ((V == 0 || V == data.getPaddingY() * 2 + data.getFont().getHeight() + 1) || (D == 0 || D == data.getWidth() - 1))) ||
+                                    ((V == 0 || V == data.getPaddingY() * 2 + data.getFont().getHeight() + 1) && ((U == 0 || U == data.getPaddingX() * 2 + data.getUWidth() + 1) || (D == 0 || D == data.getWidth() - 1))) ||
+                                    ((D == 0 || D == data.getWidth() - 1) && ((V == 0 || V == data.getPaddingY() * 2 + data.getFont().getHeight() + 1) || (U == 0 || U == data.getPaddingX() * 2 + data.getUWidth() + 1)))) {
                                 player.spawnParticle(Particle.REDSTONE, start.clone()
                                         .add(0.5, 0.5, 0.5)
                                         .add(U * u.getBlockX() + V * v.getBlockX() + D * d.getBlockX(),
@@ -78,7 +78,7 @@ public class ClocksPreview implements Listener {
         }.runTaskTimer(Main.getInstance(), 0L, 1L);
     }
 
-    public static BlockFace getBlockFace(Player player) {
+    public BlockFace getBlockFace(Player player) {
         List<Block> lastTwoTargetBlocks = player.getLastTwoTargetBlocks(null, distance);
         if (lastTwoTargetBlocks.size() != 2 || !lastTwoTargetBlocks.get(1).getType().isSolid()) return null;
         Block targetBlock = lastTwoTargetBlocks.get(1);
@@ -86,14 +86,14 @@ public class ClocksPreview implements Listener {
         return targetBlock.getFace(adjacentBlock);
     }
 
-    private static Vector d(Player player) {
+    private Vector d(Player player) {
         BlockFace face = getBlockFace(player);
         if (face != null)
             return face.getDirection();
         return null;
     }
 
-    private static Vector u(Player player) {
+    private Vector u(Player player) {
         double angle = players.get(player).getValue();
         BlockFace face = getBlockFace(player);
         if (face != null) {
@@ -115,7 +115,7 @@ public class ClocksPreview implements Listener {
         return null;
     }
 
-    private static Vector v(Player player) {
+    private Vector v(Player player) {
         double angle = players.get(player).getValue();
         BlockFace face = getBlockFace(player);
         if (face != null) {
@@ -144,12 +144,12 @@ public class ClocksPreview implements Listener {
                 if (d == null || u == null || v == null) return;
                 Location start = target.getLocation().add(d);
 
-                ClocksData clocksData = players.get(event.getPlayer()).getKey();
+                BaseData data = players.get(event.getPlayer()).getKey();
 
                 boolean empty = true;
-                for (int U = 0; U < clocksData.getPaddingX() * 2 + clocksData.getUWidth() + 2; U++) {
-                    for (int V = 0; V < clocksData.getPaddingY() * 2 + clocksData.getFont().getHeight() + 2; V++) {
-                        for (int D = 0; D < clocksData.getWidth(); D++) {
+                for (int U = 0; U < data.getPaddingX() * 2 + data.getUWidth() + 2; U++) {
+                    for (int V = 0; V < data.getPaddingY() * 2 + data.getFont().getHeight() + 2; V++) {
+                        for (int D = 0; D < data.getWidth(); D++) {
                             if (start.clone().add(U * u.getBlockX() + V * v.getBlockX() + D * d.getBlockX(),
                                     U * u.getBlockY() + V * v.getBlockY() + D * d.getBlockY(),
                                     U * u.getBlockZ() + V * v.getBlockZ() + D * d.getBlockZ()
@@ -159,16 +159,19 @@ public class ClocksPreview implements Listener {
                     }
                 }
                 if (empty) {
-                    new Clocks(clocksData.getName(), start, u, v, d);
-                    Database.addClocks(clocksData.getName(), start, u, v, d);
+                    create(event, data, start, u, v, d);
                     players.remove(event.getPlayer());
                 }
+            } else if (d(event.getPlayer()) == null) {
+                players.remove(event.getPlayer());
             } else {
                 players.put(event.getPlayer(), Map.entry(players.get(event.getPlayer()).getKey(), (players.get(event.getPlayer()).getValue() + 90) % 360));
             }
         }
         event.setCancelled(true);
     }
+
+    public abstract void create(PlayerInteractEvent event, BaseData data, Location start, Vector u, Vector v, Vector d);
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {

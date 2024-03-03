@@ -4,6 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
+import ru.incrementstudio.incclocks.bases.Base;
+import ru.incrementstudio.incclocks.clocks.Clocks;
 
 public class BlockString {
     private int length, gap;
@@ -13,7 +15,7 @@ public class BlockString {
     private Vector u, v;
     private final Letter[] letters;
 
-    public BlockString(Clocks clocks, int length, int gap, Location location, Vector u, Vector v, Font font) {
+    public BlockString(Base base, int length, int gap, Location location, Vector u, Vector v, Font font) {
         this.length = length;
         this.gap = gap;
         this.location = location;
@@ -24,7 +26,7 @@ public class BlockString {
         this.v = v;
 
         for (int i = 0; i < letters.length; i++) {
-            letters[i] = new Letter(clocks, location.clone().add(
+            letters[i] = new Letter(base, location.clone().add(
                     u.getBlockX() * i * (font.getWidth() + gap),
                     u.getBlockY() * i * (font.getWidth() + gap),
                     u.getBlockZ() * i * (font.getWidth() + gap)),

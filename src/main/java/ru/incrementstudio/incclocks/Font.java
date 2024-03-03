@@ -75,7 +75,6 @@ public class Font {
         g2d.setColor(Color.WHITE);
         g2d.drawString(character + "",
                 (width - fm.charWidth(character)) / 2,
-//                0,
                 fm.getAscent());
         g2d.dispose();
 
