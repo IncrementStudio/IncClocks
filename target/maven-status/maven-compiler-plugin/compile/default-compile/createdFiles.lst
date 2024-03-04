@@ -13,12 +13,11 @@ ru\incrementstudio\incclocks\timers\Timer$6.class
 ru\incrementstudio\incclocks\clocks\ClocksData.class
 ru\incrementstudio\incclocks\commands\Command.class
 ru\incrementstudio\incclocks\timers\Timer$4.class
+ru\incrementstudio\incclocks\timers\Timer$3$1.class
 ru\incrementstudio\incclocks\clocks\Clocks$2.class
-ru\incrementstudio\incclocks\timers\Timer$5$1.class
 ru\incrementstudio\incclocks\stopwatches\Stopwatch$6.class
 ru\incrementstudio\incclocks\bases\BaseData$TimeType.class
 ru\incrementstudio\incclocks\clocks\ClocksDatabase.class
-ru\incrementstudio\incclocks\timers\Timer$7.class
 ru\incrementstudio\incclocks\commands\Completer.class
 ru\incrementstudio\incclocks\bases\BasePreview.class
 ru\incrementstudio\incclocks\timers\Timer.class
@@ -28,7 +27,6 @@ ru\incrementstudio\incclocks\BlockString.class
 ru\incrementstudio\incclocks\bases\BaseData.class
 ru\incrementstudio\incclocks\clocks\Clocks.class
 ru\incrementstudio\incclocks\clocks\Clocks$1.class
-ru\incrementstudio\incclocks\timers\Timer$8.class
 ru\incrementstudio\incclocks\Letter.class
 ru\incrementstudio\incclocks\stopwatches\Stopwatch$3$1.class
 ru\incrementstudio\incclocks\Font.class
@@ -37,9 +35,8 @@ ru\incrementstudio\incclocks\stopwatches\Stopwatch$3.class
 ru\incrementstudio\incclocks\timers\Timer$1.class
 ru\incrementstudio\incclocks\stopwatches\Stopwatch$1.class
 ru\incrementstudio\incclocks\Letter$RegionAction.class
-ru\incrementstudio\incclocks\timers\Timer$9.class
 ru\incrementstudio\incclocks\MaterialSet.class
-ru\incrementstudio\incclocks\timers\Timer$10.class
+ru\incrementstudio\incclocks\timers\TimerData$1.class
 ru\incrementstudio\incclocks\stopwatches\Stopwatch$4.class
 ru\incrementstudio\incclocks\stopwatches\StopwatchDatabase.class
 ru\incrementstudio\incclocks\stopwatches\StopwatchDatabase$StorageData.class

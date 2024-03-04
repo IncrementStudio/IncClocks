@@ -75,7 +75,7 @@ public abstract class BaseData {
         this.name = name;
         config = new Config(Main.getInstance(), configFile.getPath());
 
-        timeType = config.get().contains("time") ? TimeType.valueOf(config.get().getString("time")) : TimeType.REAL;
+        timeType = config.get().contains("time-type") ? TimeType.valueOf(config.get().getString("time-type")) : TimeType.REAL;
         format = config.get().contains("format") ? config.get().getString("format") : "${LIME_CONCRETE}%h:%m";
         gap = config.get().contains("text.letter-spacing") ? config.get().getInt("text.letter-spacing") : 0;
         if (config.get().contains("form.padding")) {
