@@ -14,6 +14,7 @@ ru\incrementstudio\incclocks\clocks\ClocksData.class
 ru\incrementstudio\incclocks\commands\Command.class
 ru\incrementstudio\incclocks\timers\Timer$4.class
 ru\incrementstudio\incclocks\clocks\Clocks$2.class
+ru\incrementstudio\incclocks\timers\Timer$5$1.class
 ru\incrementstudio\incclocks\stopwatches\Stopwatch$6.class
 ru\incrementstudio\incclocks\bases\BaseData$TimeType.class
 ru\incrementstudio\incclocks\clocks\ClocksDatabase.class
@@ -36,7 +37,9 @@ ru\incrementstudio\incclocks\stopwatches\Stopwatch$3.class
 ru\incrementstudio\incclocks\timers\Timer$1.class
 ru\incrementstudio\incclocks\stopwatches\Stopwatch$1.class
 ru\incrementstudio\incclocks\Letter$RegionAction.class
+ru\incrementstudio\incclocks\timers\Timer$9.class
 ru\incrementstudio\incclocks\MaterialSet.class
+ru\incrementstudio\incclocks\timers\Timer$10.class
 ru\incrementstudio\incclocks\stopwatches\Stopwatch$4.class
 ru\incrementstudio\incclocks\stopwatches\StopwatchDatabase.class
 ru\incrementstudio\incclocks\stopwatches\StopwatchDatabase$StorageData.class

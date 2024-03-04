@@ -18,6 +18,7 @@ import ru.incrementstudio.incapi.utils.MathUtil;
 import ru.incrementstudio.incapi.utils.builders.ItemBuilder;
 import ru.incrementstudio.incclocks.Main;
 import ru.incrementstudio.incclocks.bases.Base;
+import ru.incrementstudio.incclocks.bases.BaseData;
 
 import java.util.Date;
 import java.util.List;
@@ -62,7 +63,7 @@ public class Timer extends Base {
                 );
                 break;
             case REAL:
-                long daysR = (timerTime / (1000 * 60 * 60 * 24)) % 99;
+                long daysR = timerTime / (1000 * 60 * 60 * 24);
                 long hoursR = (timerTime / (1000 * 60 * 60)) % 24;
                 long minutesR = (timerTime / (1000 * 60)) % 60;
                 long secondsR = (timerTime / 1000) % 60;
@@ -136,7 +137,7 @@ public class Timer extends Base {
                                                                break;
                                                            case REAL:
                                                                long currentTimeR = (long) MathUtil.lerp(timerTime, 0, MathUtil.inverseLerp(startTime, startTime + timerTime, startTime + timerTime - System.currentTimeMillis()));
-                                                               long daysR = (currentTimeR / (1000 * 60 * 60 * 24)) % 99;
+                                                               long daysR = currentTimeR / (1000 * 60 * 60 * 24);
                                                                long hoursR = (currentTimeR / (1000 * 60 * 60)) % 24;
                                                                long minutesR = (currentTimeR / (1000 * 60)) % 60;
                                                                long secondsR = (currentTimeR / 1000) % 60;
@@ -179,7 +180,7 @@ public class Timer extends Base {
                                                        );
                                                        break;
                                                    case REAL:
-                                                       long daysR = (timerTime / (1000 * 60 * 60 * 24)) % 99;
+                                                       long daysR = timerTime / (1000 * 60 * 60 * 24);
                                                        long hoursR = (timerTime / (1000 * 60 * 60)) % 24;
                                                        long minutesR = (timerTime / (1000 * 60)) % 60;
                                                        long secondsR = (timerTime / 1000) % 60;
@@ -271,30 +272,143 @@ public class Timer extends Base {
                 ).setSlot(new Button(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
                                   .setName("&a&lДНИ")
                                   .setLore(List.of(
-                                          ColorUtil.toColor("&fТекущее значение&7: &e") + ((timerTime / (1000 * 60 * 60 * 24)) % 99),
+                                          ColorUtil.toColor("&fТекущее значение&7: &e") + (timerTime / (1000 * 60 * 60 * 24)),
                                           "",
-                                          "&bLEFT CLICK &7- &f+1",
-                                          "&bRIGHT CLICK &7- &f-1",
-                                          "&bSHIFT + LEFT CLICK &7- &f+10",
-                                          "&bSHIFT + RIGHT CLICK &7- &f-10"
+                                          "&bЛКМ &7- &f+1",
+                                          "&bПКМ &7- &f-1",
+                                          "&bSHIFT + ЛКМ &7- &f+10",
+                                          "&bSHIFT + ПКМ &7- &f-10"
                                   ))
                                   .build()) {
                               @Override
                               public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
-                                  if (inventoryClickEvent.isLeftClick()) {
-                                      switch (timerData.getTimeType()) {
-                                          case GAME:
-                                              timerTime += 24000;
-                                              break;
-                                          case REAL:
-                                              timerTime += 1000 * 60 * 60 * 24;
-                                              break;
-                                      }
-                                      reloadSettingsMenu();
-                                      settingsMenu.show(player);
+                                  switch (timerData.getTimeType()) {
+                                      case GAME:
+                                          if (inventoryClickEvent.isLeftClick()) {
+                                              if (!inventoryClickEvent.isShiftClick()) {
+                                                  timerTime = Math.max(Math.min(timerTime + 24000, 24000 * 99), 0);
+                                              } else {
+                                                  timerTime = Math.max(Math.min(timerTime + 24000 * 10, 24000 * 99), 0);
+                                              }
+                                          } else {
+                                              if (!inventoryClickEvent.isShiftClick()) {
+                                                  timerTime = Math.max(Math.min(timerTime - 24000, 24000 * 99), 0);
+                                              } else {
+                                                  timerTime = Math.max(Math.min(timerTime - 24000 * 10, 24000 * 99), 0);
+                                              }
+                                          }
+                                          long time = timerTime % 24000;
+                                          long daysG = timerTime / 24000;
+                                          long hoursG = time / 1000;
+                                          long minutesG = (long) MathUtil.lerp(0, 60, MathUtil.inverseLerp(0, 1000, time % 1000));
+                                          timeString.setValue(
+                                                  data.getFormat()
+                                                          .replace("%d", "0".repeat(2 - String.valueOf(daysG).length()) + daysG)
+                                                          .replace("%h", "0".repeat(2 - String.valueOf(hoursG).length()) + hoursG)
+                                                          .replace("%m", "0".repeat(2 - String.valueOf(minutesG).length()) + minutesG)
+                                          );
+                                          break;
+                                      case REAL:
+                                          if (inventoryClickEvent.isLeftClick()) {
+                                              if (!inventoryClickEvent.isShiftClick()) {
+                                                  timerTime = Math.max(Math.min(timerTime + 1000 * 60 * 60 * 24, 1000L * 60 * 60 * 24 * 99), 0);
+                                              } else {
+                                                  timerTime = Math.max(Math.min(timerTime + 1000 * 60 * 60 * 24 * 10, 1000L * 60 * 60 * 24 * 99), 0);
+                                              }
+                                          } else {
+                                              if (!inventoryClickEvent.isShiftClick()) {
+                                                  timerTime = Math.max(Math.min(timerTime - 1000 * 60 * 60 * 24, 1000L * 60 * 60 * 24 * 99), 0);
+                                              } else {
+                                                  timerTime = Math.max(Math.min(timerTime - 1000 * 60 * 60 * 24 * 10, 1000L * 60 * 60 * 24 * 99), 0);
+                                              }
+                                          }
+                                          long daysR = timerTime / (1000 * 60 * 60 * 24);
+                                          long hoursR = (timerTime / (1000 * 60 * 60)) % 24;
+                                          long minutesR = (timerTime / (1000 * 60)) % 60;
+                                          long secondsR = (timerTime / 1000) % 60;
+                                          timeString.setValue(
+                                                  data.getFormat()
+                                                          .replace("%d", "0".repeat(2 - String.valueOf(daysR).length()) + daysR)
+                                                          .replace("%h", "0".repeat(2 - String.valueOf(hoursR).length()) + hoursR)
+                                                          .replace("%m", "0".repeat(2 - String.valueOf(minutesR).length()) + minutesR)
+                                                          .replace("%s", "0".repeat(2 - String.valueOf(secondsR).length()) + secondsR)
+                                          );
+                                          break;
                                   }
+                                  reloadSettingsMenu();
+                                  settingsMenu.show(player);
                               }
-                          }, 15
+                          }, 20
+                ).setSlot(new Button(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
+                                  .setName("&a&lЧАСЫ")
+                                  .setLore(List.of(
+                                          ColorUtil.toColor("&fТекущее значение&7: &e") + (timerData.getTimeType() == BaseData.TimeType.REAL ? (timerTime / (1000 * 60 * 60)) % 24 : (timerTime % 24000) / 1000),
+                                          "",
+                                          "&bЛКМ &7- &f+1",
+                                          "&bПКМ &7- &f-1",
+                                          "&bSHIFT + ЛКМ &7- &f+10",
+                                          "&bSHIFT + ПКМ &7- &f-10"
+                                  ))
+                                  .build()) {
+                              @Override
+                              public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
+                                  switch (timerData.getTimeType()) {
+                                      case GAME:
+                                          if (inventoryClickEvent.isLeftClick()) {
+                                              if (!inventoryClickEvent.isShiftClick()) {
+                                                  timerTime = Math.max(Math.min(timerTime + 1000, 1000 * 24 * 99), 0);
+                                              } else {
+                                                  timerTime = Math.max(Math.min(timerTime + 1000 * 10, 1000 * 24 * 99), 0);
+                                              }
+                                          } else {
+                                              if (!inventoryClickEvent.isShiftClick()) {
+                                                  timerTime = Math.max(Math.min(timerTime - 1000, 1000 * 24 * 99), 0);
+                                              } else {
+                                                  timerTime = Math.max(Math.min(timerTime - 1000 * 10, 1000 * 24 * 99), 0);
+                                              }
+                                          }
+                                          long time = timerTime % 24000;
+                                          long daysG = timerTime / 24000;
+                                          long hoursG = time / 1000;
+                                          long minutesG = (long) MathUtil.lerp(0, 60, MathUtil.inverseLerp(0, 1000, time % 1000));
+                                          timeString.setValue(
+                                                  data.getFormat()
+                                                          .replace("%d", "0".repeat(2 - String.valueOf(daysG).length()) + daysG)
+                                                          .replace("%h", "0".repeat(2 - String.valueOf(hoursG).length()) + hoursG)
+                                                          .replace("%m", "0".repeat(2 - String.valueOf(minutesG).length()) + minutesG)
+                                          );
+                                          break;
+                                      case REAL:
+                                          if (inventoryClickEvent.isLeftClick()) {
+                                              if (!inventoryClickEvent.isShiftClick()) {
+                                                  timerTime = Math.max(Math.min(timerTime + 1000 * 60 * 60, 1000L * 60 * 60 * 24 * 99), 0);
+                                              } else {
+                                                  timerTime = Math.max(Math.min(timerTime + 1000 * 60 * 60 * 10, 1000L * 60 * 60 * 24 * 99), 0);
+                                              }
+                                          } else {
+                                              if (!inventoryClickEvent.isShiftClick()) {
+                                                  timerTime = Math.max(Math.min(timerTime - 1000 * 60 * 60, 1000L * 60 * 60 * 24 * 99), 0);
+                                              } else {
+                                                  timerTime = Math.max(Math.min(timerTime - 1000 * 60 * 60 * 10, 1000L * 60 * 60 * 24 * 99), 0);
+                                              }
+                                          }
+                                          long daysR = timerTime / (1000 * 60 * 60 * 24);
+                                          long hoursR = (timerTime / (1000 * 60 * 60)) % 24;
+                                          long minutesR = (timerTime / (1000 * 60)) % 60;
+                                          long secondsR = (timerTime / 1000) % 60;
+                                          timeString.setValue(
+                                                  data.getFormat()
+                                                          .replace("%d", "0".repeat(2 - String.valueOf(daysR).length()) + daysR)
+                                                          .replace("%h", "0".repeat(2 - String.valueOf(hoursR).length()) + hoursR)
+                                                          .replace("%m", "0".repeat(2 - String.valueOf(minutesR).length()) + minutesR)
+                                                          .replace("%s", "0".repeat(2 - String.valueOf(secondsR).length()) + secondsR)
+                                          );
+                                          break;
+                                  }
+                                  reloadSettingsMenu();
+                                  settingsMenu.show(player);
+                              }
+                          }, 22
                 ).apply()
         );
     }
