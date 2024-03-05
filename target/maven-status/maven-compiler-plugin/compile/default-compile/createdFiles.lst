@@ -20,12 +20,14 @@ ru\incrementstudio\incclocks\bases\BaseData$TimeType.class
 ru\incrementstudio\incclocks\clocks\ClocksDatabase.class
 ru\incrementstudio\incclocks\commands\Completer.class
 ru\incrementstudio\incclocks\bases\BasePreview.class
+ru\incrementstudio\incclocks\timers\ActionTask$1.class
 ru\incrementstudio\incclocks\timers\Timer.class
 ru\incrementstudio\incclocks\stopwatches\Stopwatch$2.class
 ru\incrementstudio\incclocks\bases\BasePreview$1.class
 ru\incrementstudio\incclocks\BlockString.class
 ru\incrementstudio\incclocks\bases\BaseData.class
 ru\incrementstudio\incclocks\clocks\Clocks.class
+ru\incrementstudio\incclocks\timers\ActionTask.class
 ru\incrementstudio\incclocks\clocks\Clocks$1.class
 ru\incrementstudio\incclocks\Letter.class
 ru\incrementstudio\incclocks\stopwatches\Stopwatch$3$1.class

@@ -27,8 +27,8 @@ public class TimerData extends BaseData {
         actions = config.get().contains("actions") ? config.get().getStringList("actions") : new ArrayList<>();
         switch (timeType) {
             case GAME:
-                String timeMetricG = config.get().contains("time") ? config.get().getString("time") : "1h";
-                List<String> timeMetricsG = Arrays.stream(timeMetricG.split("\\|")).collect(Collectors.toList());
+                String timeMetricG = config.get().contains("time") ? config.get().getString("time").replace(" ", "") : "1h";
+                List<String> timeMetricsG = Arrays.stream(timeMetricG.split("\\+")).collect(Collectors.toList());
                 for (String timeMetricElementG : timeMetricsG) {
                     Matcher matcher = Pattern.compile("^(\\d+)([dhm])$").matcher(timeMetricElementG);
                     if (!matcher.matches()) continue;
@@ -40,8 +40,8 @@ public class TimerData extends BaseData {
                 }
                 break;
             case REAL:
-                String timeMetricR = config.get().contains("time") ? config.get().getString("time") : "1m";
-                List<String> timeMetricsR = Arrays.stream(timeMetricR.split("\\|")).collect(Collectors.toList());
+                String timeMetricR = config.get().contains("time") ? config.get().getString("time").replace(" ", "") : "1m";
+                List<String> timeMetricsR = Arrays.stream(timeMetricR.split("\\+")).collect(Collectors.toList());
                 for (String timeMetricElementR : timeMetricsR) {
                     Matcher matcher = Pattern.compile("^(\\d+)([dhms])$").matcher(timeMetricElementR);
                     if (!matcher.matches()) continue;

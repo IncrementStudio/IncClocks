@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public class MaterialSet {
     public MaterialSet(ConfigurationSection section) {
+        if (section == null) return;
         if (section.contains("back")) back = Material.valueOf(section.getString("back"));
         if (section.contains("sides")) sides = Material.valueOf(section.getString("sides"));
     }

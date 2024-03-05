@@ -112,14 +112,14 @@ public class Timer extends Base {
                                                updateTimeTask = new BukkitRunnable() {
                                                    @Override
                                                    public void run() {
-                                                       if (world.getGameTime() >= startTime + timerTime) {
-                                                           isWorking = false;
-                                                           onStop();
-                                                           cancel();
-                                                           return;
-                                                       }
                                                        switch (timerData.getTimeType()) {
                                                            case GAME:
+                                                               if (world.getGameTime() >= startTime + timerTime) {
+                                                                   isWorking = false;
+                                                                   onStop();
+                                                                   cancel();
+                                                                   return;
+                                                               }
                                                                long currentTimeG = startTime + timerTime - world.getGameTime();
                                                                long time = currentTimeG % 24000;
                                                                long daysG = currentTimeG / 24000;
@@ -133,6 +133,12 @@ public class Timer extends Base {
                                                                );
                                                                break;
                                                            case REAL:
+                                                               if (System.currentTimeMillis() >= startTime + timerTime) {
+                                                                   isWorking = false;
+                                                                   onStop();
+                                                                   cancel();
+                                                                   return;
+                                                               }
                                                                long currentTimeR = startTime + timerTime - System.currentTimeMillis();
                                                                long daysR = currentTimeR / (1000 * 60 * 60 * 24);
                                                                long hoursR = (currentTimeR / (1000 * 60 * 60)) % 24;
@@ -160,9 +166,9 @@ public class Timer extends Base {
                                                .build()) {
                                            @Override
                                            public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
-                                               if (!isWorking) return;
                                                isWorking = false;
-                                               updateTimeTask.cancel();
+                                               if (updateTimeTask != null)
+                                                   updateTimeTask.cancel();
                                                switch (timerData.getTimeType()) {
                                                    case GAME:
                                                        long time = timerTime % 24000;
@@ -329,6 +335,10 @@ public class Timer extends Base {
                     ActionTask.create(
                             () -> Bukkit.getOnlinePlayers().forEach(x -> x.sendMessage(ColorUtil.toColor(value))), delay, period, repeats
                     );
+                    break;
+                } case "destroy": {
+                    clear();
+                    TimerDatabase.remove(location);
                     break;
                 } default: {
                     File actionFile = new File("plugins/IncClocks/actions/" + action + ".js");
