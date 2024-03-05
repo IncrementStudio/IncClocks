@@ -43,28 +43,28 @@ public final class Main extends JavaPlugin {
         return logger;
     }
 
-    private List<Clocks> clocks = new ArrayList<>();
+    private final List<Clocks> clocks = new ArrayList<>();
     public List<Clocks> getClocks() {
         return clocks;
     }
-    private List<Timer> timers = new ArrayList<>();
+    private final List<Timer> timers = new ArrayList<>();
     public List<Timer> getTimers() {
         return timers;
     }
-    private List<Stopwatch> stopwatches = new ArrayList<>();
+    private final List<Stopwatch> stopwatches = new ArrayList<>();
     public List<Stopwatch> getStopwatches() {
         return stopwatches;
     }
 
-    private ClocksPreview clocksPreview = new ClocksPreview();
+    private final ClocksPreview clocksPreview = new ClocksPreview();
     public ClocksPreview getClocksPreview() {
         return clocksPreview;
     }
-    private TimerPreview timerPreview = new TimerPreview();
+    private final TimerPreview timerPreview = new TimerPreview();
     public TimerPreview getTimerPreview() {
         return timerPreview;
     }
-    private StopwatchPreview stopwatchPreview = new StopwatchPreview();
+    private final StopwatchPreview stopwatchPreview = new StopwatchPreview();
     public StopwatchPreview getStopwatchPreview() {
         return stopwatchPreview;
     }
@@ -76,7 +76,7 @@ public final class Main extends JavaPlugin {
         configManager = new ConfigManager(this, List.of("clocks", "timers", "stopwatches"));
         configManager.updateAll();
 
-        for (String dir : new String[]{"fonts", "clocks", "timers", "stopwatches"}) {
+        for (String dir : new String[]{"fonts", "clocks", "timers", "stopwatches", "actions"}) {
             File directory = new File("plugins/IncClocks/" + dir);
             if (!directory.exists())
                 directory.mkdirs();

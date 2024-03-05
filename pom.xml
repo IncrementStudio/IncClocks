@@ -78,5 +78,10 @@
           <artifactId>IncrementStudioAPI</artifactId>
           <version>main-SNAPSHOT</version>
       </dependency>
+      <dependency>
+          <groupId>org.openjdk.nashorn</groupId>
+          <artifactId>nashorn-core</artifactId>
+          <version>15.4</version>
+      </dependency>
   </dependencies>
 </project>

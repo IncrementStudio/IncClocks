@@ -4,6 +4,7 @@ import org.checkerframework.checker.regex.qual.Regex;
 import ru.incrementstudio.incclocks.bases.BaseData;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,10 +16,15 @@ public class TimerData extends BaseData {
     public long getTime() {
         return time;
     }
+    private final List<String> actions;
+    public List<String> getActions() {
+        return actions;
+    }
 
     public TimerData(String name, File configFile) {
         super(name, configFile);
 
+        actions = config.get().contains("actions") ? config.get().getStringList("actions") : new ArrayList<>();
         switch (timeType) {
             case GAME:
                 String timeMetricG = config.get().contains("time") ? config.get().getString("time") : "1h";

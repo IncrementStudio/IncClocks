@@ -1,22 +1,23 @@
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\clocks\ClocksData.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\commands\Completer.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\commands\Command.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\stopwatches\StopwatchData.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\timers\TimerPreview.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\stopwatches\Stopwatch.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\clocks\ClocksPreview.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\timers\TimerDatabase.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\bases\BasePreview.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\bases\BaseData.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\Letter.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\clocks\ClocksDatabase.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\Main.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\BlockString.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\bases\Base.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\timers\TimerData.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\stopwatches\StopwatchDatabase.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\Font.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\stopwatches\StopwatchPreview.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\MaterialSet.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\clocks\Clocks.java
-D:\Roma\Desktop\IncrementStudio\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\timers\Timer.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\stopwatches\StopwatchData.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\bases\Base.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\commands\Completer.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\timers\TimerData.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\timers\ActionTask.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\timers\TimerPreview.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\bases\BasePreview.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\clocks\ClocksPreview.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\stopwatches\StopwatchDatabase.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\MaterialSet.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\bases\BaseData.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\BlockString.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\stopwatches\StopwatchPreview.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\Letter.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\commands\Command.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\Main.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\timers\TimerDatabase.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\clocks\Clocks.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\timers\Timer.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\stopwatches\Stopwatch.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\clocks\ClocksData.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\Font.java
+D:\IntelliJ IDEA\IncDigitalClocks\src\main\java\ru\incrementstudio\incclocks\clocks\ClocksDatabase.java
