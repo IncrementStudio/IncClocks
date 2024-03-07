@@ -101,11 +101,11 @@ public abstract class Base implements Listener {
 
     @EventHandler
     public void onDestroy(PlayerInteractEvent event) {
-        if (!event.getPlayer().hasPermission("incclocks.admin")) return;
         if (event.getClickedBlock() == null) return;
         if (blockList.contains(event.getClickedBlock()) && event.getAction() == Action.LEFT_CLICK_BLOCK) {
             event.setCancelled(true);
-            onBreak(event);
+            if (event.getPlayer().hasPermission("incclocks.admin"))
+                onBreak(event);
         }
     }
 }

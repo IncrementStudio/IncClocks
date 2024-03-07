@@ -93,7 +93,8 @@ public class Letter implements Listener {
         if (event.getClickedBlock() == null) return;
         if (blockList.contains(event.getClickedBlock()) && event.getAction() == Action.LEFT_CLICK_BLOCK) {
             event.setCancelled(true);
-            base.onBreak(event);
+            if (event.getPlayer().hasPermission("incclocks.admin"))
+                base.onBreak(event);
         }
     }
 }
