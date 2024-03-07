@@ -23,11 +23,11 @@ import java.util.Map;
 public class Command implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, org.bukkit.command.Command command, String s, String[] strings) {
-        if (commandSender.hasPermission("clocks.admin")) {
+        if (commandSender.hasPermission("incclocks.admin")) {
             if (strings.length == 1) {
                 if (strings[0].equals("reload")) {
                     Main.getConfigManager().reloadAll();
-                    for (String dir : new String[]{"fonts", "clocks", "timers", "stopwatches"}) {
+                    for (String dir : new String[]{"fonts", "clocks", "timers", "stopwatches", "actions"}) {
                         File directory = new File("plugins/IncClocks/" + dir);
                         if (!directory.exists())
                             directory.mkdirs();

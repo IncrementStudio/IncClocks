@@ -66,47 +66,45 @@ public class Clocks extends Base {
 
     @Override
     public void onBreak(PlayerInteractEvent event) {
-        if (event.getPlayer().hasPermission("clocks.admin")) {
-            Menu menu = new Menu()
-                    .addPage(
-                            new Page("Вы хотите убрать часы?", 45)
-                                    .setSlots(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
-                                                    .setName(" ")
-                                                    .build(),
-                                            0, 1, 2, 3, 4, 5, 6, 7, 8,
-                                            9, 13, 17,
-                                            18, 22, 26,
-                                            27, 31, 35,
-                                            36, 37, 38, 39, 40, 41, 42, 43, 44
-                                    ).setSlots(new Button(
-                                                       new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
-                                                               .setName("&c&lНЕТ")
-                                                               .build()) {
-                                                   @Override
-                                                   public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
-                                                       player.closeInventory();
-                                                   }
-                                               },
-                                            10, 11, 12,
-                                            19, 20, 21,
-                                            28, 29, 30
-                                    ).setSlots(new Button(
-                                                       new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
-                                                               .setName("&a&lДА")
-                                                               .build()) {
-                                                   @Override
-                                                   public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
-                                                       player.closeInventory();
-                                                       clear();
-                                                       ClocksDatabase.remove(location);
-                                                   }
-                                               },
-                                            14, 15, 16,
-                                            23, 24, 25,
-                                            32, 33, 34
-                                    ).apply()
-                    );
-            menu.show(event.getPlayer());
-        }
+        Menu menu = new Menu()
+                .addPage(
+                        new Page("Вы хотите убрать часы?", 45)
+                                .setSlots(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
+                                                .setName(" ")
+                                                .build(),
+                                        0, 1, 2, 3, 4, 5, 6, 7, 8,
+                                        9, 13, 17,
+                                        18, 22, 26,
+                                        27, 31, 35,
+                                        36, 37, 38, 39, 40, 41, 42, 43, 44
+                                ).setSlots(new Button(
+                                                   new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+                                                           .setName("&c&lНЕТ")
+                                                           .build()) {
+                                               @Override
+                                               public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
+                                                   player.closeInventory();
+                                               }
+                                           },
+                                        10, 11, 12,
+                                        19, 20, 21,
+                                        28, 29, 30
+                                ).setSlots(new Button(
+                                                   new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+                                                           .setName("&a&lДА")
+                                                           .build()) {
+                                               @Override
+                                               public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
+                                                   player.closeInventory();
+                                                   clear();
+                                                   ClocksDatabase.remove(location);
+                                               }
+                                           },
+                                        14, 15, 16,
+                                        23, 24, 25,
+                                        32, 33, 34
+                                ).apply()
+                );
+        menu.show(event.getPlayer());
     }
 }

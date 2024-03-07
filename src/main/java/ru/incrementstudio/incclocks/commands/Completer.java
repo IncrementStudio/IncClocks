@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class Completer implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (!commandSender.hasPermission("clocks.admin")) return new ArrayList<>();
+        if (!commandSender.hasPermission("incclocks.admin")) return new ArrayList<>();
         if (strings.length == 1) {
             return List.of("place", "reload", "help");
         } else if (strings.length == 2) {

@@ -82,175 +82,173 @@ public class Timer extends Base {
 
     @Override
     public void onBreak(PlayerInteractEvent event) {
-        if (event.getPlayer().hasPermission("clocks.admin")) {
-            Menu menu = new Menu();
-            menu.addPage(
-                    new Page("Таймер", 45)
-                            .setSlots(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
-                                            .setName(" ")
-                                            .build(),
-                                    0, 1, 2, 3, 4, 5, 6, 7, 8,
-                                    9, 13, 17,
-                                    18, 22, 26,
-                                    27, 31, 35,
-                                    36, 37, 38, 39, 40, 41, 42, 43, 44
-                            ).setSlots(new Button(new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
-                                               .setName("&a&lСТАРТ")
-                                               .build()) {
-                                           @Override
-                                           public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
-                                               if (isWorking) return;
-                                               isWorking = true;
-                                               switch (data.getTimeType()) {
-                                                   case REAL:
-                                                       startTime = System.currentTimeMillis();
-                                                       break;
-                                                   case GAME:
-                                                       startTime = world.getGameTime();
-                                                       break;
-                                               }
-                                               updateTimeTask = new BukkitRunnable() {
-                                                   @Override
-                                                   public void run() {
-                                                       switch (timerData.getTimeType()) {
-                                                           case GAME:
-                                                               if (world.getGameTime() >= startTime + timerTime) {
-                                                                   isWorking = false;
-                                                                   onStop();
-                                                                   cancel();
-                                                                   return;
-                                                               }
-                                                               long currentTimeG = startTime + timerTime - world.getGameTime();
-                                                               long time = currentTimeG % 24000;
-                                                               long daysG = currentTimeG / 24000;
-                                                               long hoursG = time / 1000;
-                                                               long minutesG = (long) MathUtil.lerp(0, 60, MathUtil.inverseLerp(0, 1000, time % 1000));
-                                                               timeString.setValue(
-                                                                       data.getFormat()
-                                                                               .replace("%d", "0".repeat(2 - String.valueOf(daysG).length()) + daysG)
-                                                                               .replace("%h", "0".repeat(2 - String.valueOf(hoursG).length()) + hoursG)
-                                                                               .replace("%m", "0".repeat(2 - String.valueOf(minutesG).length()) + minutesG)
-                                                               );
-                                                               break;
-                                                           case REAL:
-                                                               if (System.currentTimeMillis() >= startTime + timerTime) {
-                                                                   isWorking = false;
-                                                                   onStop();
-                                                                   cancel();
-                                                                   return;
-                                                               }
-                                                               long currentTimeR = startTime + timerTime - System.currentTimeMillis();
-                                                               long daysR = currentTimeR / (1000 * 60 * 60 * 24);
-                                                               long hoursR = (currentTimeR / (1000 * 60 * 60)) % 24;
-                                                               long minutesR = (currentTimeR / (1000 * 60)) % 60;
-                                                               long secondsR = (currentTimeR / 1000) % 60;
-                                                               timeString.setValue(
-                                                                       data.getFormat()
-                                                                               .replace("%d", "0".repeat(2 - String.valueOf(daysR).length()) + daysR)
-                                                                               .replace("%h", "0".repeat(2 - String.valueOf(hoursR).length()) + hoursR)
-                                                                               .replace("%m", "0".repeat(2 - String.valueOf(minutesR).length()) + minutesR)
-                                                                               .replace("%s", "0".repeat(2 - String.valueOf(secondsR).length()) + secondsR)
-                                                               );
-                                                               break;
-                                                       }
+        Menu menu = new Menu();
+        menu.addPage(
+                new Page("Таймер", 45)
+                        .setSlots(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
+                                        .setName(" ")
+                                        .build(),
+                                0, 1, 2, 3, 4, 5, 6, 7, 8,
+                                9, 13, 17,
+                                18, 22, 26,
+                                27, 31, 35,
+                                36, 37, 38, 39, 40, 41, 42, 43, 44
+                        ).setSlots(new Button(new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+                                           .setName("&a&lСТАРТ")
+                                           .build()) {
+                                       @Override
+                                       public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
+                                           if (isWorking) return;
+                                           isWorking = true;
+                                           switch (data.getTimeType()) {
+                                               case REAL:
+                                                   startTime = System.currentTimeMillis();
+                                                   break;
+                                               case GAME:
+                                                   startTime = world.getGameTime();
+                                                   break;
+                                           }
+                                           updateTimeTask = new BukkitRunnable() {
+                                               @Override
+                                               public void run() {
+                                                   switch (timerData.getTimeType()) {
+                                                       case GAME:
+                                                           if (world.getGameTime() >= startTime + timerTime) {
+                                                               isWorking = false;
+                                                               onStop();
+                                                               cancel();
+                                                               return;
+                                                           }
+                                                           long currentTimeG = startTime + timerTime - world.getGameTime();
+                                                           long time = currentTimeG % 24000;
+                                                           long daysG = currentTimeG / 24000;
+                                                           long hoursG = time / 1000;
+                                                           long minutesG = (long) MathUtil.lerp(0, 60, MathUtil.inverseLerp(0, 1000, time % 1000));
+                                                           timeString.setValue(
+                                                                   data.getFormat()
+                                                                           .replace("%d", "0".repeat(2 - String.valueOf(daysG).length()) + daysG)
+                                                                           .replace("%h", "0".repeat(2 - String.valueOf(hoursG).length()) + hoursG)
+                                                                           .replace("%m", "0".repeat(2 - String.valueOf(minutesG).length()) + minutesG)
+                                                           );
+                                                           break;
+                                                       case REAL:
+                                                           if (System.currentTimeMillis() >= startTime + timerTime) {
+                                                               isWorking = false;
+                                                               onStop();
+                                                               cancel();
+                                                               return;
+                                                           }
+                                                           long currentTimeR = startTime + timerTime - System.currentTimeMillis();
+                                                           long daysR = currentTimeR / (1000 * 60 * 60 * 24);
+                                                           long hoursR = (currentTimeR / (1000 * 60 * 60)) % 24;
+                                                           long minutesR = (currentTimeR / (1000 * 60)) % 60;
+                                                           long secondsR = (currentTimeR / 1000) % 60;
+                                                           timeString.setValue(
+                                                                   data.getFormat()
+                                                                           .replace("%d", "0".repeat(2 - String.valueOf(daysR).length()) + daysR)
+                                                                           .replace("%h", "0".repeat(2 - String.valueOf(hoursR).length()) + hoursR)
+                                                                           .replace("%m", "0".repeat(2 - String.valueOf(minutesR).length()) + minutesR)
+                                                                           .replace("%s", "0".repeat(2 - String.valueOf(secondsR).length()) + secondsR)
+                                                           );
+                                                           break;
                                                    }
-                                               }.runTaskTimer(Main.getInstance(), 0L, 1L);
-                                               player.closeInventory();
-                                           }
-                                       },
-                                    14, 15, 16,
-                                    23, 24, 25,
-                                    32, 33, 34
-                            ).setSlots(new Button(new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
-                                               .setName("&c&lСБРОС")
-                                               .build()) {
-                                           @Override
-                                           public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
-                                               isWorking = false;
-                                               if (updateTimeTask != null)
-                                                   updateTimeTask.cancel();
-                                               switch (timerData.getTimeType()) {
-                                                   case GAME:
-                                                       long time = timerTime % 24000;
-                                                       long daysG = timerTime / 24000;
-                                                       long hoursG = time / 1000;
-                                                       long minutesG = (long) MathUtil.lerp(0, 60, MathUtil.inverseLerp(0, 1000, time % 1000));
-                                                       timeString.setValue(
-                                                               data.getFormat()
-                                                                       .replace("%d", "0".repeat(2 - String.valueOf(daysG).length()) + daysG)
-                                                                       .replace("%h", "0".repeat(2 - String.valueOf(hoursG).length()) + hoursG)
-                                                                       .replace("%m", "0".repeat(2 - String.valueOf(minutesG).length()) + minutesG)
-                                                       );
-                                                       break;
-                                                   case REAL:
-                                                       long daysR = timerTime / (1000 * 60 * 60 * 24);
-                                                       long hoursR = (timerTime / (1000 * 60 * 60)) % 24;
-                                                       long minutesR = (timerTime / (1000 * 60)) % 60;
-                                                       long secondsR = (timerTime / 1000) % 60;
-                                                       timeString.setValue(
-                                                               data.getFormat()
-                                                                       .replace("%d", "0".repeat(2 - String.valueOf(daysR).length()) + daysR)
-                                                                       .replace("%h", "0".repeat(2 - String.valueOf(hoursR).length()) + hoursR)
-                                                                       .replace("%m", "0".repeat(2 - String.valueOf(minutesR).length()) + minutesR)
-                                                                       .replace("%s", "0".repeat(2 - String.valueOf(secondsR).length()) + secondsR)
-                                                       );
-                                                       break;
                                                }
-                                               player.closeInventory();
+                                           }.runTaskTimer(Main.getInstance(), 0L, 1L);
+                                           player.closeInventory();
+                                       }
+                                   },
+                                14, 15, 16,
+                                23, 24, 25,
+                                32, 33, 34
+                        ).setSlots(new Button(new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+                                           .setName("&c&lСБРОС")
+                                           .build()) {
+                                       @Override
+                                       public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
+                                           isWorking = false;
+                                           if (updateTimeTask != null)
+                                               updateTimeTask.cancel();
+                                           switch (timerData.getTimeType()) {
+                                               case GAME:
+                                                   long time = timerTime % 24000;
+                                                   long daysG = timerTime / 24000;
+                                                   long hoursG = time / 1000;
+                                                   long minutesG = (long) MathUtil.lerp(0, 60, MathUtil.inverseLerp(0, 1000, time % 1000));
+                                                   timeString.setValue(
+                                                           data.getFormat()
+                                                                   .replace("%d", "0".repeat(2 - String.valueOf(daysG).length()) + daysG)
+                                                                   .replace("%h", "0".repeat(2 - String.valueOf(hoursG).length()) + hoursG)
+                                                                   .replace("%m", "0".repeat(2 - String.valueOf(minutesG).length()) + minutesG)
+                                                   );
+                                                   break;
+                                               case REAL:
+                                                   long daysR = timerTime / (1000 * 60 * 60 * 24);
+                                                   long hoursR = (timerTime / (1000 * 60 * 60)) % 24;
+                                                   long minutesR = (timerTime / (1000 * 60)) % 60;
+                                                   long secondsR = (timerTime / 1000) % 60;
+                                                   timeString.setValue(
+                                                           data.getFormat()
+                                                                   .replace("%d", "0".repeat(2 - String.valueOf(daysR).length()) + daysR)
+                                                                   .replace("%h", "0".repeat(2 - String.valueOf(hoursR).length()) + hoursR)
+                                                                   .replace("%m", "0".repeat(2 - String.valueOf(minutesR).length()) + minutesR)
+                                                                   .replace("%s", "0".repeat(2 - String.valueOf(secondsR).length()) + secondsR)
+                                                   );
+                                                   break;
                                            }
-                                       },
-                                    10, 11, 12,
-                                    19, 20, 21,
-                                    28, 29, 30
-                            ).setSlots(new Button(new ItemBuilder(Material.RED_WOOL)
-                                               .setName("&c&lУБРАТЬ")
-                                               .build()) {
-                                           @Override
-                                           public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
-                                               menu.show(player, 1);
-                                           }
-                                       }, 8
-                            ).apply()
-            ).addPage(
-                    new Page("Вы хотите убрать таймер?", 45)
-                            .setSlots(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
-                                            .setName(" ")
-                                            .build(),
-                                    0, 1, 2, 3, 4, 5, 6, 7, 8,
-                                    9, 13, 17,
-                                    18, 22, 26,
-                                    27, 31, 35,
-                                    36, 37, 38, 39, 40, 41, 42, 43, 44
-                            ).setSlots(new Button(
-                                               new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
-                                                       .setName("&c&lНЕТ")
-                                                       .build()) {
-                                           @Override
-                                           public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
-                                               menu.show(player, 0);
-                                           }
-                                       },
-                                    10, 11, 12,
-                                    19, 20, 21,
-                                    28, 29, 30
-                            ).setSlots(new Button(
-                                               new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
-                                                       .setName("&a&lДА")
-                                                       .build()) {
-                                           @Override
-                                           public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
-                                               player.closeInventory();
-                                               clear();
-                                               TimerDatabase.remove(location);
-                                           }
-                                       },
-                                    14, 15, 16,
-                                    23, 24, 25,
-                                    32, 33, 34
-                            ).apply()
-            );
-            menu.show(event.getPlayer());
-        }
+                                           player.closeInventory();
+                                       }
+                                   },
+                                10, 11, 12,
+                                19, 20, 21,
+                                28, 29, 30
+                        ).setSlots(new Button(new ItemBuilder(Material.RED_WOOL)
+                                           .setName("&c&lУБРАТЬ")
+                                           .build()) {
+                                       @Override
+                                       public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
+                                           menu.show(player, 1);
+                                       }
+                                   }, 8
+                        ).apply()
+        ).addPage(
+                new Page("Вы хотите убрать таймер?", 45)
+                        .setSlots(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
+                                        .setName(" ")
+                                        .build(),
+                                0, 1, 2, 3, 4, 5, 6, 7, 8,
+                                9, 13, 17,
+                                18, 22, 26,
+                                27, 31, 35,
+                                36, 37, 38, 39, 40, 41, 42, 43, 44
+                        ).setSlots(new Button(
+                                           new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+                                                   .setName("&c&lНЕТ")
+                                                   .build()) {
+                                       @Override
+                                       public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
+                                           menu.show(player, 0);
+                                       }
+                                   },
+                                10, 11, 12,
+                                19, 20, 21,
+                                28, 29, 30
+                        ).setSlots(new Button(
+                                           new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+                                                   .setName("&a&lДА")
+                                                   .build()) {
+                                       @Override
+                                       public void onClick(Player player, InventoryClickEvent inventoryClickEvent) {
+                                           player.closeInventory();
+                                           clear();
+                                           TimerDatabase.remove(location);
+                                       }
+                                   },
+                                14, 15, 16,
+                                23, 24, 25,
+                                32, 33, 34
+                        ).apply()
+        );
+        menu.show(event.getPlayer());
     }
 
     private void onStop() {

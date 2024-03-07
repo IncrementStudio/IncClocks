@@ -47,7 +47,7 @@ public class BlockString {
                         }
                         mat.append(value.charAt(j));
                     }
-                    material = Material.valueOf(mat.toString());
+                    material = Material.valueOf(mat.toString().toUpperCase());
                 }
             }
             letters[i].setMaterial(material);
