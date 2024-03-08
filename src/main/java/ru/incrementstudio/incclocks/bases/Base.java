@@ -38,7 +38,6 @@ public abstract class Base implements Listener {
                 1 + data.getOffsetX() + data.getPaddingX(),
                 1 + data.getOffsetY() + data.getPaddingY(),
                 data.getWidth() - 1), u, v, data.getFont());
-
         Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 
         for (int U = 0; U < data.getPaddingX() * 2 + timeString.getWidth() + 2; U++) {

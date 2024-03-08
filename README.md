@@ -291,10 +291,11 @@ actions:
 
 ```js
 if (arg != null) {
-    time = parseInt(arg);
-    location.getWorld().getPlayers().forEach(player => {
-        player.setFireTicks(time);
-    });
+  time = parseInt(arg);
+  players = location.getWorld().getPlayers();
+  for (i = 0; i < players.size(); i++) {
+    players.get(i).setFireTicks(time);
+  }
 }
 ```
 
