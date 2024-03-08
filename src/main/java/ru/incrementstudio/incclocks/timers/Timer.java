@@ -349,6 +349,7 @@ public class Timer extends Base {
                                     try {
                                         Bindings bindings = engine.createBindings();
                                         bindings.put("arg", value);
+                                        bindings.put("location", location);
                                         engine.eval(Files.newBufferedReader(actionFile.toPath(), StandardCharsets.UTF_8), bindings);
                                     } catch (ScriptException e) {
                                         Main.logger().error("[" + finalAction + "] При выполнении скрипта '" + finalAction + ".js' произошла ошибка!");
